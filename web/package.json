@@ -12,7 +12,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": "https://github.com/mrhoangmai93/CSIS4270-Special-topic.git",
-  "author": "Hoang Mai, Tu Tran Van, Thinh, Thao",
+  "author": "Hoang Mai, Tu Tran Van, Cuong Thinh Dao, Thanh Thao Truong",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.0",
