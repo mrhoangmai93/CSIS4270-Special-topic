@@ -34,7 +34,7 @@ async function generateTokenResponse(user, deviceInfo) {
         {
             ...deviceInfo,
             access_token: user.token(),
-            created_at: dayjs().valueOf(),
+            createdAt: dayjs().valueOf(),
             is_active: true,
             refresh_token: refreshToken,
         },
@@ -124,7 +124,7 @@ exports.refreshToken = async (req, res, next) => {
             },
             {
                 'sessions.$.refresh_token': refreshTokenKey,
-                'sessions.$.updated_at': dayjs().valueOf(),
+                'sessions.$.updatedAt': dayjs().valueOf(),
             }
         );
 
@@ -156,8 +156,8 @@ exports.login = async (req, res, next) => {
             {
                 _id: 1,
                 email: 1,
-                first_name: 1,
-                last_name: 1,
+                firstName: 1,
+                lastName: 1,
                 sessions: 1,
                 password: 1,
             }
@@ -188,12 +188,7 @@ exports.login = async (req, res, next) => {
         res.set('x-token-expiry-time', token.expiresIn);
         res.status(httpStatus.OK);
 
-        return res.json({
-            _id: user._id,
-            email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
-        });
+        return res.json(user.transform());
     } catch (error) {
         return next(error);
     }
@@ -223,17 +218,12 @@ exports.register = async (req, res, next) => {
 
         const user = await new User({
             email,
-            first_name: firstName,
-            last_name: lastName,
+            firstName: firstName,
+            lastName: lastName,
             password
         }).save();
 
-        return res.json({
-            _id: user._id,
-            email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
-        });
+        return res.json(user.transform());
 
     } catch (error) {
         return next(error);

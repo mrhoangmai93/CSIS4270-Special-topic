@@ -18,7 +18,7 @@ const authorize = async (req, res, next) => {
             return next(apiError);
         }
 
-        const token = authorization.split(' ')[1];
+        const token = authorization;
 
         try {
             const tokenResult = jwt.decode(token, jwtSecret);
@@ -55,6 +55,7 @@ const authorize = async (req, res, next) => {
 
             return next();
         } catch (e) {
+            console.log(e, authorization);
             apiError.message = 'Token Expired';
 
             return next(apiError);
