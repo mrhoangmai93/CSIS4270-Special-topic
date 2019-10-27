@@ -5,8 +5,8 @@ android {
     buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.hoangtuthinhthao.languru"
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,4 +26,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //GSON
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    // for authentication
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+
+    implementation 'com.auth0.android:jwtdecode:1.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }
