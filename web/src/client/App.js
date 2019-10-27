@@ -4,6 +4,7 @@ import { Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from "connected-react-router";
 import Index from './pages/Index';
 import Lessons from './pages/Lessons';
+import Register from './pages/Register';
 import FancyRoute from './components/FancyRoute';
 import configureStore, {
   history
@@ -16,6 +17,12 @@ const routes = [
     path: '/',
     exact: true,
     component: Index,
+  },
+  {
+    title: 'Register',
+    path: '/register',
+    exact: true,
+    component: Register,
   },
   {
     title: 'Lessons',

@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Checkbox, Form, Icon, Input} from "antd";
 import {Link} from 'react-router-dom';
 
-class Login extends React.Component {
+class Register extends React.Component {
 
     componentDidMount() {
 
@@ -44,16 +44,24 @@ class Login extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item>
+                        {getFieldDecorator('Confirm password', {
+                            rules: [{required: true, message: 'Please retype your Password!'}],
+                        })(
+                            <Input
+                                prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                type="password"
+                                placeholder="Confirm Password"
+                            />,
+                        )}
+                    </Form.Item>
+                    <Form.Item>
                         <div className="block">
-                        {getFieldDecorator('remember', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(<Checkbox>Remember me</Checkbox>)}
                         </div>
                         <Button type="primary" htmlType="submit" className="w-full block">
-                            Log in
-                        </Button> 
-                        Or <Link to="/register" className="text-green-700">Register now!</Link>
+                            Register
+                        </Button>
+                        Already has an account?
+                        <Link to="/" className="text-green-700"> Login here</Link>
                     </Form.Item>
                 </Form>
             </div>
@@ -61,6 +69,6 @@ class Login extends React.Component {
     }
 }
 
-const WrappedLoginForm = Form.create({name: 'login'})(Login);
+const WrappedRegisterForm = Form.create({name: 'register'})(Register);
 
-export default WrappedLoginForm;
+export default WrappedRegisterForm;
