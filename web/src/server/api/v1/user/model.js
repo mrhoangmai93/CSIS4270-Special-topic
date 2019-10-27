@@ -1,8 +1,11 @@
 /* eslint-disable no-invalid-this */
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const httpStatus = require('http-status');
 const dayjs = require('dayjs');
 const jwt = require('jwt-simple');
+const { Error } = require('../../../utils/api-response');
+
 const {
     env, jwtSecret, jwtExpirationInterval,
 } = require('../../../config');
@@ -13,19 +16,22 @@ const {
  */
 
 const userSchema = new mongoose.Schema({
-    created_at: {
-        default: Date.now,
-        type: Number,
+    email: {
+        type: String,
+        match: /^\S+@\S+\.\S+$/,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
     },
-    email: { type: String },
-    first_name: { type: String },
-    last_name: { type: String },
+    firstName: { type: String },
+    lastName: { type: String },
     password: { type: String },
     sessions: [
         {
             access_token: { type: String },
             client_type: { type: String },
-            created_at: {
+            createdAt: {
                 default: dayjs().valueOf(),
                 type: Number,
             },
@@ -38,11 +44,15 @@ const userSchema = new mongoose.Schema({
             socket_id: { type: String },
         },
     ],
-    updated_at: {
+    createdAt: {
         default: Date.now,
         type: Number,
     },
-    verify_tokens: {
+    updatedAt: {
+        default: Date.now,
+        type: Number,
+    },
+    verifyTokens: {
         email: {
             default: '',
             type: String,
@@ -80,6 +90,26 @@ userSchema.pre('save', async function save(next) {
  * Methods
  */
 userSchema.method({
+    transform() {
+        const transformed = {};
+        const fields = [
+            'id',
+            'email',
+            'firstName',
+            'lastName',
+            'sessions',
+            'createdAt',
+            'updatedAt',
+            'verifyTokens',
+        ];
+
+        fields.forEach((field) => {
+            transformed[field] = this[field];
+        });
+
+        return transformed;
+    },
+
     async passwordMatches(password) {
         const result = await bcrypt.compare(password, this.password);
 
@@ -100,7 +130,33 @@ userSchema.method({
 /**
  * Statics
  */
-userSchema.statics = {};
+userSchema.statics = {
+
+    /**
+     * Return new validation error
+     * if error is a mongoose duplicate key error
+     *
+     * @param {Error} error
+     * @returns {Error|APIError}
+     */
+    checkDuplicateEmail(error) {
+        if (error.name === 'MongoError' && error.code === 11000) {
+            return new Error({
+                message: 'Validation Error',
+                errors: [{
+                    field: 'email',
+                    location: 'body',
+                    // messages: ['"email" already exists'],
+                    messages: ['User already exists. Please try log in'],
+                }],
+                status: httpStatus.CONFLICT,
+                isPublic: true,
+                stack: error.stack,
+            });
+        }
+        return error;
+    },
+};
 
 /**
  * @typedef User
