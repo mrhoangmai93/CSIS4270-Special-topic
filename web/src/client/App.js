@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from "connected-react-router";
 import Index from './pages/Index';
+import Login from './pages/Login';
 import Lessons from './pages/Lessons';
 import FancyRoute from './components/FancyRoute';
 import configureStore, {
@@ -12,10 +13,16 @@ const store = configureStore({});
 
 const routes = [
   {
-    title: 'Login',
+    title: 'Home',
     path: '/',
     exact: true,
     component: Index,
+  },
+  {
+    title: 'Login',
+    path: '/login',
+    exact: true,
+    component: Login,
   },
   {
     title: 'Lessons',
