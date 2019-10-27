@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Languru</string>
+
+    <string name="api_url">http://localhost:5001/api</string>
 </resources>

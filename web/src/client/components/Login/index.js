@@ -1,6 +1,9 @@
 import React from 'react';
 import {Button, Checkbox, Form, Icon, Input} from "antd";
 import {Link} from 'react-router-dom';
+const VIEW_CALLBACK_ENUMS = {
+    LOGIN: 'LOGIN'
+};
 
 class Login extends React.Component {
 
@@ -12,7 +15,7 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                this.props.callbackHandler(VIEW_CALLBACK_ENUMS.LOGIN, values);
             }
         });
     };
@@ -23,12 +26,12 @@ class Login extends React.Component {
             <div className="lg:w-1/3 mx-auto p-2 mt-8 mb-8">
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('username', {
-                            rules: [{required: true, message: 'Please input your username!'}],
+                        {getFieldDecorator('email', {
+                            rules: [{required: true, message: 'Please input your email!'}],
                         })(
                             <Input
                                 prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                placeholder="Username"
+                                placeholder="Email"
                             />,
                         )}
                     </Form.Item>
@@ -52,7 +55,7 @@ class Login extends React.Component {
                         </div>
                         <Button type="primary" htmlType="submit" className="w-full block">
                             Log in
-                        </Button> 
+                        </Button>
                         Or <Link to="/register" className="text-green-700">Register now!</Link>
                     </Form.Item>
                 </Form>
@@ -64,3 +67,7 @@ class Login extends React.Component {
 const WrappedLoginForm = Form.create({name: 'login'})(Login);
 
 export default WrappedLoginForm;
+
+export {
+    VIEW_CALLBACK_ENUMS as LOGIN_CALLBACK_ENUMS,
+};
