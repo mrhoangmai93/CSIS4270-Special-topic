@@ -1,0 +1,8 @@
+const PREFIX = "AUTH_LOGIN_";
+
+
+export const LOGIN_REQUEST = `${PREFIX}LOGIN_REQUEST`;
+export const LOGIN_ERROR = `${PREFIX}LOGIN_ERROR`;
+export const LOGIN_SUCCESS = `${PREFIX}LOGIN_SUCCESS`;
+
+

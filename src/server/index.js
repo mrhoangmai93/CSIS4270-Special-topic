@@ -15,8 +15,16 @@ database.connect();
 
 // Connect Socket.IO
 app.use((req, res, next) => {
-    req.io = io;
+    res.io = io;
     next();
+});
+
+io.on('connection', socket => {
+    console.log('User connected');
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    })
 });
 
 
