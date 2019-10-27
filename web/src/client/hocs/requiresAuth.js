@@ -32,8 +32,9 @@ export default function(ComposedComponent) {
     }
 
     const mapStateToProps = state => {
+        console.log(state.authentication);
         return {
-            isAuthenticated: state.auth.get("isAuthenticated")
+            isAuthenticated: state.authentication.login.get("isAuthenticated")
         };
     };
     return connect(
