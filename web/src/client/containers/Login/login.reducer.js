@@ -19,6 +19,11 @@ export default function (state = initialState, {type, payload}) {
             });
         case ActionType.LOGIN_ERROR:
             return state.set('error', payload);
+        case ActionType.LOGOUT_SUCCESS:
+            return state.merge({
+                isAuthenticated: false,
+                userInfo: null,
+            });
         default:
             return state;
     }

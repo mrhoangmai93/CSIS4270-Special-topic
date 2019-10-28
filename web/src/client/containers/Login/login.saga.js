@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import * as LOGIN_ACTION from "./login.action";
 import {login, logout} from '../../libs/user.lib';
+import { push } from 'connected-react-router'
 
 function* handleLogin({payload}) {
     try {
@@ -11,7 +12,7 @@ function* handleLogin({payload}) {
         localStorage.setItem('accessToken', res.headers.authorization);
         localStorage.setItem('refreshToken', res.headers['x-refresh-token']);
         localStorage.setItem('user', JSON.stringify(res.data));
-
+        yield put(push('/'));
         yield put(LOGIN_ACTION.loginSuccess(res.data));
     } catch (e) {
         yield put(LOGIN_ACTION.loginError((e.response) ? e.response.data.message : 'Connection error'));
@@ -26,7 +27,7 @@ function* handleLogout() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
-
+        yield put(push('/'));
         yield put(LOGIN_ACTION.logoutSuccess());
     } catch (e) {
         yield put(LOGIN_ACTION.logoutError((e.response) ? e.response.data.message : 'Connection error'));

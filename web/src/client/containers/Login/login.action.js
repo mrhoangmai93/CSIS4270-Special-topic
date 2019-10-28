@@ -41,7 +41,7 @@ export function logout() {
 }
 export function logoutSuccess() {
     return {
-        type: LOGIN_SUCCESS,
+        type: LOGOUT_SUCCESS,
     };
 }
 export function logoutError(payload) {

@@ -18,5 +18,4 @@ class Lessons extends Component{
         );
     }
 }
-export default withLayout(Lessons);
-// export default requireAuth(withLayout(Lessons));
+export default requireAuth(withLayout(Lessons));

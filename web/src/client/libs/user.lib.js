@@ -6,5 +6,5 @@ export const login = (payload) => {
         return axios.post(`${path}/login`, {...payload, clientType: 'browser'}).then(res => res);
 };
 export const logout = (payload) => {
-    return axios.post(`${path}/logout`, payload).then(res => res);
+    return axios.put(`${path}/logout`, payload).then(res => res);
 };
