@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
 import com.hoangtuthinhthao.languru.controllers.api.ApiService;
 import com.hoangtuthinhthao.languru.controllers.authentication.Session;
 import com.hoangtuthinhthao.languru.controllers.authentication.TokenRenewInterceptor;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private User user;
     private SharedPreferences prefs;
     private UserSession session;
-
+    ApiService apiAuthInterface;
     Dialog dialog;
     ProgressDialog progressDialog;
     @Override
@@ -48,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // find Views
         createNewAccount = findViewById(R.id.createAccount);
         createNewAccount.setOnClickListener(this);
+        apiAuthInterface = ApiClient.getClient().create(ApiService.class);
 
     }
 
@@ -56,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case  R.id.createAccount:
-                PopUp.openRegisterPopup( dialog, LoginActivity.this, progressDialog);
+                PopUp.openRegisterPopup( dialog, LoginActivity.this, progressDialog, apiAuthInterface);
                 break;
                 default:
                     break;
