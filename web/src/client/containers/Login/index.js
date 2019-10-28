@@ -1,24 +1,45 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import LoginForm from "../../components/Login";
+import LoginForm, {LOGIN_CALLBACK_ENUMS} from "../../components/Login";
+import {login} from './login.action';
+import { push } from 'connected-react-router'
 
 class Login extends React.Component {
 
+    componentDidMount() {
+        const {loginState, push} = this.props;
+        console.log(!!loginState.get('userInfo'));
+        if(!!loginState.get('userInfo')) push('/');
+    }
+
+    callbackHandler = (type, data) => {
+        const {login} = this.props;
+        switch (type) {
+            case LOGIN_CALLBACK_ENUMS.LOGIN:
+                login(data.email, data.password);
+                break;
+            default:
+                break;
+        }
+    };
+
     render() {
         return (<>
-            <LoginForm/>
+            <LoginForm callbackHandler={this.callbackHandler}/>
         </>);
     }
 }
 
 
 const mapStateToProps = state => ({
-    login: state.authentication.login
+    loginState: state.authentication.login
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    login,
+    push,
+};
 
 
 export default withRouter(

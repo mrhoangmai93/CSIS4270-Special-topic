@@ -11,8 +11,8 @@ function withLayout(BaseComponent) {
         return (
             <Layout>
                 <Header><SiteHeader {...props} /></Header>
-                <Content style={{background: '#fff'}}>
-                    <div className="container mx-auto mt-2 mb-2">
+                <Content style={{background: '#fff', height: "calc(100vh - 133px)"}}>
+                    <div className="container mx-auto mt-2 mb-2" >
                         <BaseComponent {...props} />
                     </div>
                 </Content>

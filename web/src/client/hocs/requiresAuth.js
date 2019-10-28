@@ -1,6 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
+import { push } from 'connected-react-router'
 
 export default function(ComposedComponent) {
     class Authenticate extends React.Component {
@@ -13,10 +14,10 @@ export default function(ComposedComponent) {
         }
 
         _checkAndRedirect() {
-            const { isAuthenticated } = this.props;
+            const { isAuthenticated, push } = this.props;
 
             if (!isAuthenticated) {
-                document.location = "/";
+                push('/');
             }
         }
 
@@ -32,13 +33,12 @@ export default function(ComposedComponent) {
     }
 
     const mapStateToProps = state => {
-        console.log(state.authentication);
         return {
             isAuthenticated: state.authentication.login.get("isAuthenticated")
         };
     };
     return connect(
         mapStateToProps,
-        {}
+        {push}
     )(Authenticate);
 }

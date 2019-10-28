@@ -1,11 +1,8 @@
 import React from 'react';
 import {Button, Checkbox, Form, Icon, Input} from "antd";
 import {Link} from 'react-router-dom';
-const VIEW_CALLBACK_ENUMS = {
-    LOGIN: 'LOGIN'
-};
 
-class Login extends React.Component {
+class Register extends React.Component {
 
     componentDidMount() {
 
@@ -15,7 +12,7 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.callbackHandler(VIEW_CALLBACK_ENUMS.LOGIN, values);
+                console.log('Received values of form: ', values);
             }
         });
     };
@@ -26,12 +23,12 @@ class Login extends React.Component {
             <div className="lg:w-1/3 mx-auto p-2 mt-8 mb-8">
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('email', {
-                            rules: [{required: true, message: 'Please input your email!'}],
+                        {getFieldDecorator('username', {
+                            rules: [{required: true, message: 'Please input your username!'}],
                         })(
                             <Input
                                 prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                placeholder="Email"
+                                placeholder="Username"
                             />,
                         )}
                     </Form.Item>
@@ -47,16 +44,24 @@ class Login extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item>
+                        {getFieldDecorator('Confirm password', {
+                            rules: [{required: true, message: 'Please retype your Password!'}],
+                        })(
+                            <Input
+                                prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                type="password"
+                                placeholder="Confirm Password"
+                            />,
+                        )}
+                    </Form.Item>
+                    <Form.Item>
                         <div className="block">
-                        {getFieldDecorator('remember', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(<Checkbox>Remember me</Checkbox>)}
                         </div>
                         <Button type="primary" htmlType="submit" className="w-full block">
-                            Log in
+                            Register
                         </Button>
-                        Or <Link to="/register" className="text-green-700">Register now!</Link>
+                        Already has an account?
+                        <Link to="/login" className="text-green-700"> Login here</Link>
                     </Form.Item>
                 </Form>
             </div>
@@ -64,10 +69,6 @@ class Login extends React.Component {
     }
 }
 
-const WrappedLoginForm = Form.create({name: 'login'})(Login);
+const WrappedRegisterForm = Form.create({name: 'register'})(Register);
 
-export default WrappedLoginForm;
-
-export {
-    VIEW_CALLBACK_ENUMS as LOGIN_CALLBACK_ENUMS,
-};
+export default WrappedRegisterForm;

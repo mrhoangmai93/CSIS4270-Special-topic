@@ -204,16 +204,16 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
     try {
         const {
-            firstName, lastName, email, password,
+            firstName, lastName, email, password, clientType, deviceToken
         } = req.body;
 
         const isEmailExists = await User.findOne({ email });
 
         if (isEmailExists) {
-            throw new Error({
+            return next(Error({
                 message: 'Email address is already exists.',
                 status: httpStatus.CONFLICT,
-            });
+            }));
         }
 
         const user = await new User({
@@ -222,7 +222,14 @@ exports.register = async (req, res, next) => {
             lastName: lastName,
             password
         }).save();
-
+        const token = await generateTokenResponse(user, {
+            client_type: clientType,
+            device_token: deviceToken,
+        });
+        res.set('authorization', token.accessToken);
+        res.set('x-refresh-token', token.refreshToken);
+        res.set('x-token-expiry-time', token.expiresIn);
+        res.status(httpStatus.OK);
         return res.json(user.transform());
 
     } catch (error) {
