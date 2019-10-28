@@ -210,10 +210,10 @@ exports.register = async (req, res, next) => {
         const isEmailExists = await User.findOne({ email });
 
         if (isEmailExists) {
-            throw new Error({
+            return next(Error({
                 message: 'Email address is already exists.',
                 status: httpStatus.CONFLICT,
-            });
+            }));
         }
 
         const user = await new User({

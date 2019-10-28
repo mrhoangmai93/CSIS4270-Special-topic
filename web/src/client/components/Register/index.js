@@ -61,7 +61,7 @@ class Register extends React.Component {
                             Register
                         </Button>
                         Already has an account?
-                        <Link to="/" className="text-green-700"> Login here</Link>
+                        <Link to="/login" className="text-green-700"> Login here</Link>
                     </Form.Item>
                 </Form>
             </div>
