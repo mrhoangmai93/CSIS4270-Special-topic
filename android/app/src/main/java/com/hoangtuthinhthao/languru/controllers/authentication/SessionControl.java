@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class Session {
+public class SessionControl {
     Context context;
     private SharedPreferences prefs;
 
-    public Session(Context context) {
+    public SessionControl(Context context) {
         this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
     }
