@@ -72,7 +72,7 @@ public class PopUp {
                 progressDialog.show();
                 User user = new User(fName, lName, emailString , pw);
                 //Register new user
-               AuthHelpers.signupUser(apiAuthInterface, user);
+                AuthHelpers.signupUser(context,apiAuthInterface, user);
 
             }
         });
