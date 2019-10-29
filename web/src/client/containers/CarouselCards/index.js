@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import LessonCard from '../../components/LessonCard';
+import './index.scss';
 
 const imgWrapper = [
     'https://langurupic.s3.amazonaws.com/pic/school/backpack.jpeg',
@@ -14,24 +15,39 @@ const imgWrapper = [
     'https://langurupic.s3.amazonaws.com/pic/school/ruler.jpg',
 ];
 
+const wordsArr = ['backpack', 'book', 'compass', 'eraser', 'maker', 'notebook', 'pen', 'pencil sharpener', 'pencil', 'ruler'];
+
 class CarouselCards extends Component {
-    render(){
-        const children = imgWrapper.map((src, i) => (
-            <div
-              key={i.toString()}
-              className="img-wrapper"
-              style={{
-                backgroundImage: `url(${src})`,
-              }}
-            />
-          ));
-          return (
-            <div className="carousel-demo-wrapper">
-              <LessonCard className="carousel-demo" childMaxLength={6}>
-                {children}
-              </LessonCard>
-            </div>);
-    }
+  render(){
+    const children = imgWrapper.map((imgSrc, i) => {
+      return (
+
+        <div
+          key={i.toString()}
+          // className="img-wrapper"
+          // style={{
+          //   backgroundImage: `url(${src})`,
+          // }}
+        >
+          <div className="flip-card img-wrapper">
+            <div className="flip-card-inner">
+              <div className="flip-card-front">
+                <img src={imgSrc} alt="Avatar" style={{width: "250px", height: "300px"}} />
+              </div>
+              <div className="flip-card-back">{wordsArr[i]}</div>
+            </div>
+          </div>
+        </div>      
+      )
+    });
+    return (
+      <div className="carousel-demo-wrapper">
+        <LessonCard className="carousel-demo" childMaxLength={6}>
+          {children}
+        </LessonCard>
+      </div>
+    );
+  }
 }
 
 export default CarouselCards;

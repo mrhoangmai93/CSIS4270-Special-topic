@@ -42,11 +42,13 @@
   }
   
   .itemWrapper .rotateLayer .bgAndBlurLayer {
-    border-radius: 8px;
+    border-radius: 5px;
     overflow: hidden;
-    background: #d0d2db;
     transition: filter .45s;
     margin: auto;
+}
+.bgAndBlurLayer{
+    background: #d0d2db;
   }
   
   .itemWrapper .rotateLayer .bgAndBlurLayer .contentLayer {
