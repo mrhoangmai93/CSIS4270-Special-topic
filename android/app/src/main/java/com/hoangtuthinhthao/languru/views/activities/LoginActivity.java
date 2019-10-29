@@ -15,19 +15,18 @@ import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
 import com.hoangtuthinhthao.languru.controllers.api.ApiService;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
-import com.hoangtuthinhthao.languru.controllers.authentication.Session;
+import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
 import com.hoangtuthinhthao.languru.models.User;
 import com.hoangtuthinhthao.languru.views.popUp.PopUp;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
-    private ApiService apiService;
-    private EditText firstName, lastName, email, password, comfirmPassword;
+    private ApiService apiAuthInterface;
+    private EditText  email, password;
     private TextView createNewAccount;
     private Button login;
     private User user;
     private SharedPreferences prefs;
-    private Session session;
-    ApiService apiAuthInterface;
+    private SessionControl session;
     Dialog dialog;
     ProgressDialog progressDialog;
 
@@ -38,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         // initialize session
-        session = new Session(LoginActivity.this);
+        session = new SessionControl(LoginActivity.this);
 
         //initialize dialog and progress dialog
         dialog = new Dialog(this);
@@ -73,6 +72,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * This function to login user
+     */
     private void loginUser() {
         String txtEmail = email.getText().toString().trim();
         String txtPassword = password.getText().toString().trim();
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        AuthHelpers.loginUser(apiAuthInterface, txtEmail, txtPassword);
+        AuthHelpers.loginUser(this, apiAuthInterface,session, txtEmail, txtPassword);
     }
 
 
