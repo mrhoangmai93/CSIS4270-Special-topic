@@ -3,14 +3,14 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import LoginForm, {LOGIN_CALLBACK_ENUMS} from "../../components/Login";
 import {login} from './login.action';
-import { push } from 'connected-react-router'
+import {push} from 'connected-react-router'
 
 class Login extends React.Component {
 
     componentDidMount() {
         const {loginState, push} = this.props;
         console.log(!!loginState.get('userInfo'));
-        if(!!loginState.get('userInfo')) push('/');
+        if (!!loginState.get('userInfo')) push('/');
     }
 
     callbackHandler = (type, data) => {
@@ -25,8 +25,10 @@ class Login extends React.Component {
     };
 
     render() {
+        const {loginState} = this.props;
         return (<>
-            <LoginForm callbackHandler={this.callbackHandler}/>
+            <LoginForm callbackHandler={this.callbackHandler} isLoading={loginState.get('isLoading')}
+                       error={loginState.get('error')} />
         </>);
     }
 }

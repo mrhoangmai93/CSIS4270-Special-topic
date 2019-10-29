@@ -119,7 +119,7 @@ userSchema.method({
         const date = dayjs();
         const payload = {
             _id: this._id,
-            exp: date.add(7, 'day').valueOf(),
+            exp: date.add(60, 'day').valueOf(),
             iat: date.valueOf(),
         };
 
