@@ -54,7 +54,7 @@
         android:backgroundTint="@color/colorAccent"
         android:gravity="center"
         android:padding="10dp"
-        android:drawableLeft="@drawable/ic_lock"
+        android:drawableLeft="@drawable/ic_person"
         android:layout_below="@id/txtFirstName"
         android:layout_marginTop="30dp" />
 

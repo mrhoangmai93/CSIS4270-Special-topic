@@ -30,10 +30,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ApiService apiAuthInterface;
     Dialog dialog;
     ProgressDialog progressDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // initialize session
+        session = new Session(LoginActivity.this);
 
         //initialize dialog and progress dialog
         dialog = new Dialog(this);

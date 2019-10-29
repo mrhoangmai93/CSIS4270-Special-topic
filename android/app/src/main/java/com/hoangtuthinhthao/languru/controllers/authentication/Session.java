@@ -9,9 +9,9 @@ public class Session {
     Context context;
     private SharedPreferences prefs;
 
-    public Session(Context cntx) {
-        this.context = cntx;
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public Session(Context context) {
+        this.context = context;
+        prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
     public void setJwtToken(String token) {
