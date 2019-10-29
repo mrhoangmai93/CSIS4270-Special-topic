@@ -210,10 +210,10 @@ exports.register = async (req, res, next) => {
         const isEmailExists = await User.findOne({ email });
 
         if (isEmailExists) {
-            return next(Error({
+            throw new Error({
                 message: 'Email address is already exists.',
                 status: httpStatus.CONFLICT,
-            }));
+            });
         }
 
         const user = await new User({
@@ -229,7 +229,7 @@ exports.register = async (req, res, next) => {
         res.set('authorization', token.accessToken);
         res.set('x-refresh-token', token.refreshToken);
         res.set('x-token-expiry-time', token.expiresIn);
-        res.status(httpStatus.OK);
+        res.status(httpStatus.CREATED);
         return res.json(user.transform());
 
     } catch (error) {

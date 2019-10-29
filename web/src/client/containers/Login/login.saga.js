@@ -2,12 +2,12 @@ import {
     all, put, call, takeLatest
 } from 'redux-saga/effects';
 import * as LOGIN_ACTION from "./login.action";
-import {login, logout} from '../../libs/user.lib';
+import {auth, logout} from '../../libs/user.lib';
 import { push } from 'connected-react-router'
 
 function* handleLogin({payload}) {
     try {
-        const res = yield call(login, payload);
+        const res = yield call(auth, payload, 'login');
 
         localStorage.setItem('accessToken', res.headers.authorization);
         localStorage.setItem('refreshToken', res.headers['x-refresh-token']);
@@ -22,7 +22,7 @@ function* handleLogin({payload}) {
 function* handleLogout() {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = yield call(logout, {refreshToken});
+        yield call(logout, {refreshToken});
 
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');

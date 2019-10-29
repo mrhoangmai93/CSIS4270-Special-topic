@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Checkbox, Form, Icon, Input} from "antd";
 import {Link} from 'react-router-dom';
+
 const VIEW_CALLBACK_ENUMS = {
     LOGIN: 'LOGIN'
 };
@@ -39,21 +40,22 @@ class Login extends React.Component {
                         {getFieldDecorator('password', {
                             rules: [{required: true, message: 'Please input your Password!'}],
                         })(
-                            <Input
+                            <Input.Password
                                 prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                type="password"
                                 placeholder="Password"
                             />,
                         )}
                     </Form.Item>
                     <Form.Item>
                         <div className="block">
-                        {getFieldDecorator('remember', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(<Checkbox>Remember me</Checkbox>)}
+                            {getFieldDecorator('remember', {
+                                valuePropName: 'checked',
+                                initialValue: true,
+                            })(<Checkbox>Remember me</Checkbox>)}
                         </div>
-                        <Button type="primary" htmlType="submit" className="w-full block">
+                        {this.props.error && <span className="bg-orange-500 text-white pl-6 rounded-sm mb-2 block">{this.props.error}</span> }
+                        <Button type="primary" htmlType="submit" className="w-full block"
+                                loading={this.props.isLoading}>
                             Log in
                         </Button>
                         Or <Link to="/register" className="text-green-700">Register now!</Link>
