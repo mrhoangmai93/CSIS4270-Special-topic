@@ -42,6 +42,7 @@ class LessonCard extends Component {
         rotate: -props.current * this.angle,
         current: props.current,
         transition: 'none',
+        currentBackground: '#d0d2db',
       };
     }
     componentDidMount() {
@@ -151,8 +152,9 @@ class LessonCard extends Component {
         );
         const style = {
           transform,
-          opacity: animStyle.opacity,
+        //   opacity: animStyle.opacity,
         };
+        
         return (
           <div
             className="itemWrapper"
@@ -168,7 +170,7 @@ class LessonCard extends Component {
             >
               <div
                 className="bgAndBlurLayer"
-                style={{ ...animStyle }}
+                style={{...animStyle, background: this.state.current === i ? 'white' : this.state.currentBackground}}
               >
                 <div className="contentLayer" style={{ opacity: this.state.current === i ? 1 : 0 }}>
                   {item}

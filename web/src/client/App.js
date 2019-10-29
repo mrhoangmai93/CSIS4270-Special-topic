@@ -6,6 +6,7 @@ import Index from './pages/Index';
 import Login from './pages/Login';
 import Lessons from './pages/Lessons';
 import Register from './pages/Register';
+import Game from './pages/Game';
 import FancyRoute from './components/FancyRoute';
 import configureStore, {
   history
@@ -36,6 +37,12 @@ const routes = [
     path: '/dashboard/lessons',
     exact: true,
     component: Lessons,
+  },
+  {
+    title: 'Game',
+    path: '/dashboard/game',
+    exact: true,
+    component: Game,
   },
 ];
 
