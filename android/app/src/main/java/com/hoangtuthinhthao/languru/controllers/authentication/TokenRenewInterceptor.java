@@ -7,11 +7,11 @@ import okhttp3.Response;
 
 
 public class TokenRenewInterceptor implements Interceptor {
-    private Session session;
+   // private Session session;
 
-    public TokenRenewInterceptor(Session session) {
-        this.session = session;
-    }
+   // public TokenRenewInterceptor(Session session) {
+//        this.session = session;
+//    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -22,7 +22,7 @@ public class TokenRenewInterceptor implements Interceptor {
         // different upon implementation of backend.
         String newToken = response.header("x-auth-token");
         if (newToken != null) {
-            session.saveToken(newToken);
+           // session.saveToken(newToken);
         }
 
         return response;

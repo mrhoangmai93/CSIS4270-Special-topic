@@ -1,19 +1,29 @@
 package com.hoangtuthinhthao.languru.controllers.authentication;
 
-public interface Session {
-    boolean isLoggedIn();
 
-    void saveToken(String token);
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-    String getToken();
+public class Session {
+    Context context;
+    private SharedPreferences prefs;
 
-    void saveEmail(String email);
+    public Session(Context cntx) {
+        this.context = cntx;
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    }
 
-    String getEmail();
+    public void setJwtToken(String token) {
+        prefs.edit().putString("JwtToken", token).commit();
+    }
 
-    void savePassword(String password);
+    public String getJwtToken() {
+        String token = prefs.getString("JwtToken", "");
+        if (token == null || token.isEmpty()) {
+            token = "";
+        }
+        return token;
+    }
 
-    String getPassword();
-
-    void invalidate();
 }
