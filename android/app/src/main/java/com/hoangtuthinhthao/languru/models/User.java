@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-    @SerializedName("first_name")
+    @SerializedName("firstName")
     @Expose
-    private String first_name;
-    @SerializedName("last_name")
+    private String firstName;
+    @SerializedName("lastName")
     @Expose
-    private String last_name;
+    private String lastName;
     @SerializedName("email")
     @Expose
     private String email;
@@ -18,20 +18,30 @@ public class User {
     @Expose
     private String password;
 
-    public String getFirst_name() {
-        return first_name;
+    public User(String first_name, String last_name, String email, String password) {
+        this.firstName = first_name;
+        this.lastName = last_name;
+        this.email = email;
+        this.password = password;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    // getters and setters
+
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

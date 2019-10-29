@@ -1,4 +1,4 @@
-package com.hoangtuthinhthao.languru.views;
+package com.hoangtuthinhthao.languru.views.activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,37 +9,36 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
 import com.hoangtuthinhthao.languru.controllers.api.ApiService;
+import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.Session;
-import com.hoangtuthinhthao.languru.controllers.authentication.TokenRenewInterceptor;
-import com.hoangtuthinhthao.languru.controllers.authentication.UserSession;
 import com.hoangtuthinhthao.languru.models.User;
 import com.hoangtuthinhthao.languru.views.popUp.PopUp;
-
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private ApiService apiService;
     private EditText firstName, lastName, email, password, comfirmPassword;
     private TextView createNewAccount;
-    private Button register;
+    private Button login;
     private User user;
     private SharedPreferences prefs;
-    private UserSession session;
-
+    private Session session;
+    ApiService apiAuthInterface;
     Dialog dialog;
     ProgressDialog progressDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // initialize session
+        session = new Session(LoginActivity.this);
 
         //initialize dialog and progress dialog
         dialog = new Dialog(this);
@@ -47,7 +46,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // find Views
         createNewAccount = findViewById(R.id.createAccount);
+        login = findViewById(R.id.login);
+        email = findViewById(R.id.loginEmail);
+        password = findViewById(R.id.loginPassword);
+
+        // set on click
         createNewAccount.setOnClickListener(this);
+        login.setOnClickListener(this);
+        //
+        apiAuthInterface = ApiClient.getClient().create(ApiService.class);
 
     }
 
@@ -56,10 +63,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case  R.id.createAccount:
-                PopUp.openRegisterPopup( dialog, LoginActivity.this, progressDialog);
+                PopUp.openRegisterPopup( dialog, LoginActivity.this, progressDialog, apiAuthInterface);
+                break;
+            case  R.id.login:
+                    loginUser();
                 break;
                 default:
                     break;
         }
     }
+
+    private void loginUser() {
+        String txtEmail = email.getText().toString().trim();
+        String txtPassword = password.getText().toString().trim();
+        if(txtEmail.isEmpty() || txtPassword.isEmpty()) {
+            Toast.makeText(this, "Email/Password cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AuthHelpers.loginUser(apiAuthInterface, txtEmail, txtPassword);
+    }
+
+
 }

@@ -11,18 +11,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.api.ApiService;
+import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
+import com.hoangtuthinhthao.languru.models.User;
 
 public class PopUp {
     /**
      * This function open a popup for user to register a new account
-     *
-     * @param dialog
+     *  @param dialog
      * @param context
      * @param progressDialog
+     * @param apiAuthInterface
      */
-    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog) {
+    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog, final ApiService apiAuthInterface) {
 
-        dialog.setContentView(R.layout.register_popup);
+        dialog.setContentView(R.layout.popup_register);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);
         final EditText email = dialog.findViewById(R.id.txtEmail);
@@ -67,8 +70,9 @@ public class PopUp {
                 }
                 progressDialog.setMessage("Register...");
                 progressDialog.show();
+                User user = new User(fName, lName, emailString , pw);
                 //Register new user
-               // Authentication.registerNewUser(dialog, db, context, mAuth, progressDialog, emailString, pw, userName);
+               AuthHelpers.signupUser(apiAuthInterface, user);
 
             }
         });
