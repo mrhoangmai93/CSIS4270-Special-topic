@@ -33,7 +33,8 @@ dependencies {
     // for authentication
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.2.0'
-    //implementation 'com.auth0.android:jwtdecode:1.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    // JWT
+    implementation 'com.auth0.android:jwtdecode:1.4.0'
 }
