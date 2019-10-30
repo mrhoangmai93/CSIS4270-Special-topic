@@ -3,7 +3,7 @@ import GameBoard, {GAMEBOARD_CALLBACK_ENUMS} from "../../components/GameBoard";
 import {push} from "connected-react-router";
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
-
+import GameCell from '../../components/GameCell';
 class Game extends React.Component {
 
     componentDidMount() {
@@ -13,7 +13,7 @@ class Game extends React.Component {
 
 
     render() {
-        return <div className="m-auto text-center"> <GameBoard> </GameBoard></div>
+        return <div className="m-auto text-center"> <GameBoard> <GameCell /> </GameBoard></div>
     }
 }
 const mapStateToProps = state => ({
