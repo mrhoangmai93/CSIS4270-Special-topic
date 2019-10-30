@@ -2,6 +2,7 @@ package com.hoangtuthinhthao.languru.controllers.api;
 
 import com.hoangtuthinhthao.languru.models.DefaultResponse;
 import com.hoangtuthinhthao.languru.models.responses.ResponseLogin;
+import com.hoangtuthinhthao.languru.models.responses.ResponseRegister;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -14,7 +15,7 @@ public interface ApiService {
 //    Call<User> loginUser(@Path("accountId") String accountId);
     @FormUrlEncoded
     @POST("/v1/user/register")
-    Call<DefaultResponse> registerUser(
+    Call<ResponseRegister> registerUser(
             @Field("email") String email,
             @Field("password") String password,
             @Field("firstName") String firstName,

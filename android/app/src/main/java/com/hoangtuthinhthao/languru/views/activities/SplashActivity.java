@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
@@ -31,8 +32,11 @@ public class SplashActivity extends AppCompatActivity {
         AuthChecker authChecker = new AuthChecker(sessionControl);
 
         if(authChecker.isAuthenticated()) {
+            Log.i("auth", "true");
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
         } else {
+            Log.i("auth", "false");
+
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
         }
         progressDialog.dismiss();

@@ -2,6 +2,10 @@ package com.hoangtuthinhthao.languru.views.activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +24,11 @@ import com.hoangtuthinhthao.languru.models.User;
 import com.hoangtuthinhthao.languru.views.popUp.PopUp;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+    public static final String REGISTER_DONE = "REGISTER_DONE";
+    public static final String AUTH_FAILED = "AUTH_FAILED";
+    public static final String LOGIN_DONE = "LOGIN_DONE";
+
+
     private ApiService apiAuthInterface;
     private EditText  email, password;
     private TextView createNewAccount;
@@ -29,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SessionControl session;
     Dialog dialog;
     ProgressDialog progressDialog;
-
+    private BroadcastReceiver response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +64,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //
         apiAuthInterface = ApiClient.getClient().create(ApiService.class);
 
+        //initialize the broadcast
+        response = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (intent.getAction()){
+                    case REGISTER_DONE :
+                    case LOGIN_DONE:
+                        registerDone(intent);
+                        break;
+                    case AUTH_FAILED :
+                        Toast.makeText(context, "Failed to save group", Toast.LENGTH_SHORT).show();
+                        session.setJwtToken("");
+                        break;
+                }
+            }
+        };
     }
 
+
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is paused.
+        super.onPause();
+        unregisterReceiver(response);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // An IntentFilter can match against actions, categories, and data
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(REGISTER_DONE);
+        filter.addAction(LOGIN_DONE);
+        filter.addAction(AUTH_FAILED);
+
+        // register broadcast
+        registerReceiver(response,filter);
+    }
 
     @Override
     public void onClick(View v) {
@@ -86,5 +131,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         AuthHelpers.loginUser(this, apiAuthInterface,session, txtEmail, txtPassword);
     }
 
+    /**
+     * This function set the token and change to main activity
+     * @param intent received from response broadcast
+     */
+    private void registerDone(Intent intent) {
+        String token = intent.getStringExtra("token");
+        session.setJwtToken(token);
 
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
+    }
 }

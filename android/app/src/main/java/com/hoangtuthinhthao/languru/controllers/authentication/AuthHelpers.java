@@ -11,6 +11,7 @@ import com.hoangtuthinhthao.languru.models.DefaultResponse;
 import com.hoangtuthinhthao.languru.models.Session;
 import com.hoangtuthinhthao.languru.models.responses.ResponseLogin;
 import com.hoangtuthinhthao.languru.models.User;
+import com.hoangtuthinhthao.languru.models.responses.ResponseRegister;
 import com.hoangtuthinhthao.languru.views.activities.MainActivity;
 
 import org.json.JSONException;
@@ -23,46 +24,58 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.hoangtuthinhthao.languru.views.activities.LoginActivity.*;
+
+
 public class AuthHelpers {
     /**
      * Sign up user
      * @param apiInterface
      * @param user
      */
-    public static void signupUser(final Context context, ApiService apiInterface, final SessionControl session, final User user) {
+    public static void signupUser(final Context context, ApiService apiInterface, final User user) {
         // Set up progressbar before call
-        Call<DefaultResponse> call = apiInterface.registerUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), "android");
+        Call<ResponseRegister> call = apiInterface.registerUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), "android");
 
-        final Gson gson = new Gson();
-        final String json = gson.toJson(user);
-        call.enqueue(new Callback<DefaultResponse>() {
+        call.enqueue(new Callback<ResponseRegister>() {
             @Override
-            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+            public void onResponse(Call<ResponseRegister> call, Response<ResponseRegister> response) {
                 if(response.isSuccessful()){
                     response.body(); // have your all data
                     List<Session> sessions = response.body().getSessions();
                     String token = "";
                     if(sessions != null)
                         token = sessions.get(0).getAccessToken();
-                    //Log.i("token", token);
-                    session.setJwtToken(token);
 
-                    context.startActivity(new Intent(context, MainActivity.class));
+                    Intent intent = new Intent();
+                    intent.setAction(REGISTER_DONE);
+                    intent.putExtra("token",token);
+                    context.sendBroadcast(intent);
+
+
                 }
-                else   Toast.makeText(context, (CharSequence) response.errorBody(),Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent();
+                    intent.setAction(AUTH_FAILED);
+                    intent.putExtra("message",response.errorBody().toString());
+                    context.sendBroadcast(intent);
+                }
             }
 
             @Override
-            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseRegister> call, Throwable t) {
                 Log.e("SignupFragment", t.getMessage());
-
+                Intent intent = new Intent();
+                intent.setAction(AUTH_FAILED);
+                intent.putExtra("message", t.getMessage());
+                context.sendBroadcast(intent);
             }
 
         });
     }
 
     /**
-     * login user
+     * login user broadcast the token after finished
      * @param context
      * @param apiInterface
      * @param session
@@ -82,10 +95,11 @@ public class AuthHelpers {
                     String token = "";
                     if(sessions != null)
                          token = sessions.get(0).getAccessToken();
-                    //Log.i("token", token);
-                    session.setJwtToken(token);
 
-                    context.startActivity(new Intent(context, MainActivity.class));
+                    Intent intent = new Intent();
+                    intent.setAction(LOGIN_DONE);
+                    intent.putExtra("token",token);
+                    context.sendBroadcast(intent);
                 }
                 else   Toast.makeText(context, (CharSequence) response.errorBody(),Toast.LENGTH_SHORT).show();
             }
@@ -93,7 +107,10 @@ public class AuthHelpers {
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
                 Log.e("Login Failed", t.getMessage());
-
+                Intent intent = new Intent();
+                intent.setAction(AUTH_FAILED);
+                intent.putExtra("message", t.getMessage());
+                context.sendBroadcast(intent);
             }
 
         });
