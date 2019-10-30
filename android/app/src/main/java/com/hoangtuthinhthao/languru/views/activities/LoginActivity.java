@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,10 +72,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 switch (intent.getAction()){
                     case REGISTER_DONE :
                     case LOGIN_DONE:
+                        Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
                         registerDone(intent);
                         break;
                     case AUTH_FAILED :
-                        Toast.makeText(context, "Failed to save group", Toast.LENGTH_SHORT).show();
+                        String msg = intent.getStringExtra("message");
+                        Log.i("auth error", msg);
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                         session.setJwtToken("");
                         break;
                 }

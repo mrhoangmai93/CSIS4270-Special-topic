@@ -2,4 +2,9 @@
     <string name="app_name">Languru</string>
 
     <string name="api_url">http://localhost:5001/api</string>
+
+    <string name="log_out">Log out</string>
+    <string name="settings">Settings</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
 </resources>

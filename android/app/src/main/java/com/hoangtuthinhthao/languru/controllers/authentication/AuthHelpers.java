@@ -101,7 +101,7 @@ public class AuthHelpers {
                     intent.putExtra("token",token);
                     context.sendBroadcast(intent);
                 }
-                else   Toast.makeText(context, (CharSequence) response.errorBody(),Toast.LENGTH_SHORT).show();
+                else   Toast.makeText(context, "Failed",Toast.LENGTH_SHORT).show();
             }
 
             @Override
