@@ -3,6 +3,8 @@ const httpStatus = require('http-status');
 const dayjs = require('dayjs');
 const uuidv4 = require('uuid/v4');
 const User = require('./model');
+const Lesson = require('../lesson/model');
+
 const { Error } = require('../../../utils/api-response');
 const { env } = require('../../../config');
 const {
@@ -285,6 +287,67 @@ exports.changePassword = async (req, res, next) => {
  * @public
  */
 exports.addWord = async (req, res, next) => {
+    try {
  const {word, topic} = req.body;
- const searchWord = User.find({_id: req.user._id}).exec();
+ const {user} = req;
+ const searchWord = await User.
+ find({_id: req.user._id, 
+    'learnedWords.word': word, 
+    'learnedWords.topic': topic}).exec();
+if(searchWord.length > 0) {
+    throw new Error({
+        message: 'Word already exist.',
+        status: httpStatus.CONFLICT,
+    });
+} else {
+
+    const updatedUser = await User.findOneAndUpdate(
+        {  _id:user._id },
+        { $push: { "learnedWords": {
+            word,
+            topic
+          }}}, {new: true }).exec();
+          return res.json(updatedUser.transform());
+}
+} catch (error) {
+    return next(error);
+}
 };
+
+/**
+ * Get progress of user
+ * @public
+ */
+exports.getProgress = async (req, res, next) => {
+    try {
+        const {topic} = req.query;
+        let topics = Lesson.topics;
+        if(topic && !topics.includes(topic)) {
+            throw new Error({
+                message: 'Topic is not valid.',
+                status: httpStatus.CONFLICT,
+            });
+        }
+        if(topic) {
+            topics = [topic];
+        }
+        console.log(topics);
+            const results = await Promise.all(topics.map(async (t) => {
+                const total = await Lesson.countDocuments({topic: t }).exec();
+                const learnedWordsFilter = req.user.learnedWords.filter(w => w.topic === t);
+                const learnedCount = learnedWordsFilter.length || 0;
+                const progress = ((learnedCount / total) * 100).toFixed(2);
+                console.log({
+                    topic: t,
+                    progress
+                });
+                return {
+                    topic: t,
+                    progress
+                }
+            }));
+            res.json(results);
+    } catch (error) {
+    return next(error);
+}
+}

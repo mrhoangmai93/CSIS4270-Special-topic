@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const topics = ["greeting", "music", "animals", "furniture", "school"];
 const lessonSchema = new mongoose.Schema({
-  word: String,
+  word: {
+    type: String,
+    lowercase: true,
+  },
   description: String,
   image: String,
   topic: {

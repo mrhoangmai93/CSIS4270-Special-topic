@@ -22,7 +22,13 @@ module.exports = {
                 .trim(),
         },
     },
-
+    // Get /v1/user/getProgress
+    getProgress: {
+        ...headers,
+        query: {
+            topic: Joi.string().trim(),
+        }
+    },
     // POST /v1/user/change-password
     changePassword: {
         ...headers,

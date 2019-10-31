@@ -26,7 +26,10 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
     },
     learnedWords: [{
-        word: String,
+        word: {
+            type:String,
+            lowercase: true,
+        },
         topic: {
             type: String,
             enum: Lesson.topics,
