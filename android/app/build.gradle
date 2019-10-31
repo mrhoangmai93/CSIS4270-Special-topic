@@ -40,4 +40,13 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // JWT
     implementation 'com.auth0.android:jwtdecode:1.4.0'
+    // Round image
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    //Carousel Animation
+    implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
 }

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
-import com.hoangtuthinhthao.languru.controllers.api.ApiService;
+import com.hoangtuthinhthao.languru.controllers.api.ApiAuthService;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.models.User;
 
@@ -23,7 +23,7 @@ public class PopUp {
      * @param progressDialog
      * @param apiAuthInterface
      */
-    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog, final ApiService apiAuthInterface) {
+    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog, final ApiAuthService apiAuthInterface) {
 
         dialog.setContentView(R.layout.popup_register);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

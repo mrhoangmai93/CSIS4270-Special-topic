@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
-import com.hoangtuthinhthao.languru.controllers.api.ApiService;
+import com.hoangtuthinhthao.languru.controllers.api.ApiAuthService;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
 import com.hoangtuthinhthao.languru.models.User;
@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String LOGIN_DONE = "LOGIN_DONE";
 
 
-    private ApiService apiAuthInterface;
+    private ApiAuthService apiAuthInterface;
     private EditText  email, password;
     private TextView createNewAccount;
     private Button login;
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         createNewAccount.setOnClickListener(this);
         login.setOnClickListener(this);
         //
-        apiAuthInterface = ApiClient.getClient().create(ApiService.class);
+        apiAuthInterface = ApiClient.getClient().create(ApiAuthService.class);
 
         //initialize the broadcast
         response = new BroadcastReceiver() {
