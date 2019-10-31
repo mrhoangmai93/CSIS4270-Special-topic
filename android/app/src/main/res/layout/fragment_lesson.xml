@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".views.fragments.LessonFragment">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25" >
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:id="@+id/topicName"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="Topic Name"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/topicRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1" >
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDetail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <LinearLayout
+                android:id="@+id/lessonNameFields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lbLessonName"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Word:"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="30dp"
+                    />
+                <TextView
+                    android:id="@+id/lessonName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Word Name"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="30dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lessonDescriptionField"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lessonNameFields"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Description:"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="30dp"
+                    />
+                <TextView
+                    android:id="@+id/lessonDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" Lesson Description"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="30dp"
+                    />
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+
+</LinearLayout>

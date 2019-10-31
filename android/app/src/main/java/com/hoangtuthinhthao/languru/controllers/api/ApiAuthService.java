@@ -9,10 +9,9 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface ApiService {
+public interface ApiAuthService {
 
-//    @GET("user/login")
-//    Call<User> loginUser(@Path("accountId") String accountId);
+
     @FormUrlEncoded
     @POST("/v1/user/register")
     Call<ResponseRegister> registerUser(

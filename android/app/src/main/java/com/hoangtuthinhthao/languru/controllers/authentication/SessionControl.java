@@ -6,8 +6,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class SessionControl {
+    public static final String JWT_TOKEN = "JwtToken";
     Context context;
-    private SharedPreferences prefs;
+    private  SharedPreferences prefs;
 
     public SessionControl(Context context) {
         this.context = context;
@@ -15,11 +16,15 @@ public class SessionControl {
     }
 
     public void setJwtToken(String token) {
-        prefs.edit().putString("JwtToken", token).commit();
+        if (token == null || token.equals("")) {
+            prefs.edit().remove(JWT_TOKEN).apply();
+        } else {
+            prefs.edit().putString(JWT_TOKEN, token).apply();
+        }
     }
 
-    public String getJwtToken() {
-        String token = prefs.getString("JwtToken", "");
+    public  String getJwtToken() {
+        String token = prefs.getString(JWT_TOKEN, "");
         if (token == null || token.isEmpty()) {
             token = "";
         }

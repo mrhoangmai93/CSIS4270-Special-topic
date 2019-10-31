@@ -5,19 +5,12 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.hoangtuthinhthao.languru.controllers.api.ApiService;
-import com.hoangtuthinhthao.languru.models.DefaultResponse;
+import com.hoangtuthinhthao.languru.controllers.api.ApiAuthService;
 import com.hoangtuthinhthao.languru.models.Session;
 import com.hoangtuthinhthao.languru.models.responses.ResponseLogin;
 import com.hoangtuthinhthao.languru.models.User;
 import com.hoangtuthinhthao.languru.models.responses.ResponseRegister;
-import com.hoangtuthinhthao.languru.views.activities.MainActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,7 +26,7 @@ public class AuthHelpers {
      * @param apiInterface
      * @param user
      */
-    public static void signupUser(final Context context, ApiService apiInterface, final User user) {
+    public static void signupUser(final Context context, ApiAuthService apiInterface, final User user) {
         // Set up progressbar before call
         Call<ResponseRegister> call = apiInterface.registerUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), "android");
 
@@ -82,7 +75,7 @@ public class AuthHelpers {
      * @param email
      * @param password
      */
-    public static void loginUser(final Context context, ApiService apiInterface, final SessionControl session, final String email, String password) {
+    public static void loginUser(final Context context, ApiAuthService apiInterface, final SessionControl session, final String email, String password) {
         // Set up progressbar before call
         Call<ResponseLogin> call = apiInterface.loginUser(email, password, "android");
 
@@ -101,7 +94,7 @@ public class AuthHelpers {
                     intent.putExtra("token",token);
                     context.sendBroadcast(intent);
                 }
-                else   Toast.makeText(context, (CharSequence) response.errorBody(),Toast.LENGTH_SHORT).show();
+                else   Toast.makeText(context, "Failed",Toast.LENGTH_SHORT).show();
             }
 
             @Override

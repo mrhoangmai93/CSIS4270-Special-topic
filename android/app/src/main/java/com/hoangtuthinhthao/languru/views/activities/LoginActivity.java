@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
-import com.hoangtuthinhthao.languru.controllers.api.ApiService;
+import com.hoangtuthinhthao.languru.controllers.api.ApiAuthService;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
 import com.hoangtuthinhthao.languru.models.User;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String LOGIN_DONE = "LOGIN_DONE";
 
 
-    private ApiService apiAuthInterface;
+    private ApiAuthService apiAuthInterface;
     private EditText  email, password;
     private TextView createNewAccount;
     private Button login;
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         createNewAccount.setOnClickListener(this);
         login.setOnClickListener(this);
         //
-        apiAuthInterface = ApiClient.getClient().create(ApiService.class);
+        apiAuthInterface = ApiClient.getClient().create(ApiAuthService.class);
 
         //initialize the broadcast
         response = new BroadcastReceiver() {
@@ -71,10 +72,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 switch (intent.getAction()){
                     case REGISTER_DONE :
                     case LOGIN_DONE:
+                        Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
                         registerDone(intent);
                         break;
                     case AUTH_FAILED :
-                        Toast.makeText(context, "Failed to save group", Toast.LENGTH_SHORT).show();
+                        String msg = intent.getStringExtra("message");
+                        Log.i("auth error", msg);
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                         session.setJwtToken("");
                         break;
                 }
