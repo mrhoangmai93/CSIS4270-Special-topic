@@ -10,27 +10,22 @@ public class AuthChecker {
 
     private Context context;
     private SessionControl sessionControl;
+    private JWT jwt;
 
     public AuthChecker(SessionControl sessionControl) {
         this.sessionControl = sessionControl;
+        String token = sessionControl.getJwtToken();
+
+        if(!(token == null  || token.equals(""))) {
+            this.jwt = new JWT(token);
+        }
+
     }
 
     public boolean isAuthenticated() {
-        boolean isAuth = false;
 
-        String token = sessionControl.getJwtToken();
-
-        if(!token.equals("")) {
-            JWT jwt = new JWT(token);
-
-            Date expiresAt = jwt.getExpiresAt();
-
-            if (expiresAt != null && System.currentTimeMillis() < expiresAt.getTime()) {
-                isAuth = true;
-            }
-        }
-
-
-        return isAuth;
+        return jwt != null && jwt.isExpired(0);
     }
+
+
 }

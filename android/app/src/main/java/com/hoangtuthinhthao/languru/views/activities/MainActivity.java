@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
+import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
 import com.hoangtuthinhthao.languru.controllers.loadServices.LoadLesson;
 import com.hoangtuthinhthao.languru.controllers.loadServices.LoadLessonCallback;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     BroadcastReceiver response;
     // Load Lesson callback
     private LoadLessonCallback callback;
+
+    //Session
+    private SessionControl sessionControl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
+        //Session
+        sessionControl = new SessionControl(this);
+
         // initialze callback for load lesson
         callback = new LoadLessonCallback() {
             @Override
@@ -105,11 +113,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AuthChecker authChecker = new AuthChecker(sessionControl);
 
+        if(!authChecker.isAuthenticated()) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.logout :
+                sessionControl.setJwtToken(null);
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                break;
+        }
+
+        return true;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
