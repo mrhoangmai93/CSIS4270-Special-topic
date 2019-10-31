@@ -10,6 +10,18 @@ const headers = {
 };
 
 module.exports = {
+    // POST /v1/user/addword
+    addWord: {
+        ...headers,
+        body: {
+            word: Joi.string()
+                .required()
+                .trim(),
+            topic: Joi.string()
+                .required()
+                .trim(),
+        },
+    },
 
     // POST /v1/user/change-password
     changePassword: {

@@ -7,6 +7,7 @@ const {
     login,
     refreshToken,
     changePassword,
+    addWord
 } = require('./validation');
 
 const { authorize } = require('../../../middlewares/auth');
@@ -17,5 +18,6 @@ routes.route('/register').post(validate(register), controller.register);
 routes.route('/login').post(validate(login), controller.login);
 routes.route('/logout').put(validate(refreshToken), authorize(), controller.logout);
 routes.route('/change-password').put(validate(changePassword), authorize(), controller.changePassword);
+routes.route('/addWord').post(validate(addWord), authorize(), controller.addWord);
 
 module.exports = routes;

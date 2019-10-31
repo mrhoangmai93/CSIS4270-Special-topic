@@ -5,6 +5,7 @@ const httpStatus = require('http-status');
 const dayjs = require('dayjs');
 const jwt = require('jwt-simple');
 const { Error } = require('../../../utils/api-response');
+const Lesson = require('./../lesson/model');
 
 const {
     env, jwtSecret, jwtExpirationInterval,
@@ -24,6 +25,13 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
     },
+    learnedWords: [{
+        word: String,
+        topic: {
+            type: String,
+            enum: Lesson.topics,
+        }
+    }],
     firstName: { type: String },
     lastName: { type: String },
     password: { type: String },
@@ -98,6 +106,7 @@ userSchema.method({
             'firstName',
             'lastName',
             'sessions',
+            'learnedWords',
             'createdAt',
             'updatedAt',
             'verifyTokens',

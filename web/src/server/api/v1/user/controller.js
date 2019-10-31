@@ -279,3 +279,12 @@ exports.changePassword = async (req, res, next) => {
         return next(error);
     }
 };
+
+/**
+ * Add new learned word to user profile
+ * @public
+ */
+exports.addWord = async (req, res, next) => {
+ const {word, topic} = req.body;
+ const searchWord = User.find({_id: req.user._id}).exec();
+};
