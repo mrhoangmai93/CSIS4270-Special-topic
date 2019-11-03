@@ -337,7 +337,7 @@ exports.getProgress = async (req, res, next) => {
         }
         const results = await Promise.all(topics.map(async (t) => {
             const total = await Lesson.countDocuments({topic: t}).exec();
-            const learnedWordsFilter = req.user.learnedWords.filter(w => w.topic === t);
+            const learnedWordsFilter = req.user.learnedWords ? req.user.learnedWords.filter(w => w.topic === t) : [];
             const learnedCount = learnedWordsFilter.length || 0;
             const progress = ((learnedCount / total) * 100).toFixed(2);
             return {
