@@ -5,16 +5,15 @@ const uuidv4 = require('uuid/v4');
 const User = require('./model');
 const Lesson = require('../lesson/model');
 
-const { Error } = require('../../../utils/api-response');
-const { env } = require('../../../config');
+const {Error} = require('../../../utils/api-response');
+const {env} = require('../../../config');
 const {
     jwtExpirationInterval,
 } = require('../../../config');
 const {
     capitalizeEachLetter, generateRandom,
 } = require('../../../utils/methods');
-const { keysToCamel } = require('../../../utils/snake');
-
+const {keysToCamel} = require('../../../utils/snake');
 
 
 /**
@@ -61,7 +60,7 @@ async function generateTokenResponse(user, deviceInfo) {
  */
 exports.logout = async (req, res, next) => {
     try {
-        const { refreshToken } = req.body;
+        const {refreshToken} = req.body;
 
         const user = await User.findOne({
             sessions: {
@@ -84,7 +83,7 @@ exports.logout = async (req, res, next) => {
                 _id: user._id,
                 'sessions.refresh_token': refreshToken,
             },
-            { $pull: { sessions: { refresh_token: refreshToken } } }
+            {$pull: {sessions: {refresh_token: refreshToken}}}
         );
 
         return res.status(httpStatus.NO_CONTENT).json();
@@ -100,7 +99,7 @@ exports.logout = async (req, res, next) => {
  */
 exports.refreshToken = async (req, res, next) => {
     try {
-        const { refreshToken } = req.body;
+        const {refreshToken} = req.body;
 
         const user = await User.findOne({
             sessions: {
@@ -154,7 +153,7 @@ exports.login = async (req, res, next) => {
             email, password, clientType, deviceToken,
         } = req.body;
         const user = await User.findOne(
-            { email },
+            {email},
             {
                 _id: 1,
                 email: 1,
@@ -209,7 +208,7 @@ exports.register = async (req, res, next) => {
             firstName, lastName, email, password, clientType, deviceToken
         } = req.body;
 
-        const isEmailExists = await User.findOne({ email });
+        const isEmailExists = await User.findOne({email});
 
         if (isEmailExists) {
             throw new Error({
@@ -249,10 +248,10 @@ exports.changePassword = async (req, res, next) => {
             body: {
                 password, oldPassword,
             },
-            user: { _id: userId },
+            user: {_id: userId},
         } = req;
 
-        const query = { _id: userId };
+        const query = {_id: userId};
         const user = await User.findOne(query);
         const isPasswordMatches = await user.passwordMatches(oldPassword);
         const isSamePassword = await user.passwordMatches(password);
@@ -274,7 +273,7 @@ exports.changePassword = async (req, res, next) => {
         const rounds = env === 'test' ? 1 : 10;
         const hash = await bcrypt.hash(password, rounds);
 
-        await User.findOneAndUpdate({ _id: user._id }, { password: hash });
+        await User.findOneAndUpdate({_id: user._id}, {password: hash});
 
         return res.status(httpStatus.NO_CONTENT).json();
     } catch (error) {
@@ -288,30 +287,35 @@ exports.changePassword = async (req, res, next) => {
  */
 exports.addWord = async (req, res, next) => {
     try {
- const {word, topic} = req.body;
- const {user} = req;
- const searchWord = await User.
- find({_id: req.user._id, 
-    'learnedWords.word': word, 
-    'learnedWords.topic': topic}).exec();
-if(searchWord.length > 0) {
-    throw new Error({
-        message: 'Word already exist.',
-        status: httpStatus.CONFLICT,
-    });
-} else {
+        const {word, topic} = req.body;
+        const {user} = req;
+        const searchWord = await User.find({
+            _id: req.user._id,
+            'learnedWords.word': word,
+            'learnedWords.topic': topic
+        }).exec();
+        if (searchWord.length > 0) {
+            throw new Error({
+                message: 'Word already exist.',
+                status: httpStatus.CONFLICT,
+            });
+        } else {
 
-    const updatedUser = await User.findOneAndUpdate(
-        {  _id:user._id },
-        { $push: { "learnedWords": {
-            word,
-            topic
-          }}}, {new: true }).exec();
-          return res.json(updatedUser.transform());
-}
-} catch (error) {
-    return next(error);
-}
+            const updatedUser = await User.findOneAndUpdate(
+                {_id: user._id},
+                {
+                    $push: {
+                        "learnedWords": {
+                            word,
+                            topic
+                        }
+                    }
+                }, {new: true}).exec();
+            return res.json(updatedUser.transform());
+        }
+    } catch (error) {
+        return next(error);
+    }
 };
 
 /**
@@ -322,32 +326,27 @@ exports.getProgress = async (req, res, next) => {
     try {
         const {topic} = req.query;
         let topics = Lesson.topics;
-        if(topic && !topics.includes(topic)) {
+        if (topic && !topics.includes(topic)) {
             throw new Error({
                 message: 'Topic is not valid.',
                 status: httpStatus.CONFLICT,
             });
         }
-        if(topic) {
+        if (topic) {
             topics = [topic];
         }
-        console.log(topics);
-            const results = await Promise.all(topics.map(async (t) => {
-                const total = await Lesson.countDocuments({topic: t }).exec();
-                const learnedWordsFilter = req.user.learnedWords.filter(w => w.topic === t);
-                const learnedCount = learnedWordsFilter.length || 0;
-                const progress = ((learnedCount / total) * 100).toFixed(2);
-                console.log({
-                    topic: t,
-                    progress
-                });
-                return {
-                    topic: t,
-                    progress
-                }
-            }));
-            res.json(results);
+        const results = await Promise.all(topics.map(async (t) => {
+            const total = await Lesson.countDocuments({topic: t}).exec();
+            const learnedWordsFilter = req.user.learnedWords.filter(w => w.topic === t);
+            const learnedCount = learnedWordsFilter.length || 0;
+            const progress = ((learnedCount / total) * 100).toFixed(2);
+            return {
+                topic: t,
+                progress
+            }
+        }));
+        res.json(results);
     } catch (error) {
-    return next(error);
-}
+        return next(error);
+    }
 }

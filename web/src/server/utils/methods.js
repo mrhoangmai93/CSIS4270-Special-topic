@@ -1,11 +1,3 @@
-const fs = require('fs');
-const httpStatus = require('http-status');
-const jwt = require('jwt-simple');
-const dayjs = require('dayjs');
-const User = require('../api/v1/user/model');
-const { Error } = require('../utils/api-response');
-const { jwtSecret } = require('../config');
-
 const capitalizeFirstLetter = (val) => val.charAt(0).toUpperCase() + val.toLowerCase().slice(1);
 
 exports.capitalizeFirstLetter = capitalizeFirstLetter;

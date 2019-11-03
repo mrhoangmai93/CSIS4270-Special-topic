@@ -54,8 +54,14 @@ exports.listByTopic = async (req, res, next) => {
             stack: error.stack,
         }));
     }
-
-
 };
-
+exports.listRandom = async (req, res, next) => {
+    try {
+        const {amount} = req.params;
+        const list = await Lesson.aggregate([{$sample: {size: amount}}]).exec();
+        res.json(list);
+    } catch (error) {
+        return next(error);
+    }
+};
 

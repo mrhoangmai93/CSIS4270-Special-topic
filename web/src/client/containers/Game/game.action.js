@@ -1,7 +1,170 @@
+import {LOGIN_REQUEST} from "../Login/login.action";
 
 
 const PREFIX = "GAME_";
 
-export const START = `${PREFIX}START`;
+export const GO_SINGLE_PLAYER = `${PREFIX}GO_SINGLE_PLAYER`;
+export const GO_MULTI_PLAYERS = `${PREFIX}GO_MULTI_PLAYERS`;
+export const SET_IS_MULTI_PLAYERS = `${PREFIX}SET_IS_MULTI_PLAYERS`;
+export const SET_GAME_STATE = `${PREFIX}SET_GAME_STATE`;
+export const SET_CELL_MATCH = `${PREFIX}SET_CELL_MATCH`;
+export const SET_CELL_FLIP = `${PREFIX}SET_CELL_FLIP`;
+export const CLEAR_CELL_PICKS = `${PREFIX}CLEAR_CELL_PICKS`;
+
+export const INCREASE_MATCH_COUNT = `${PREFIX}INCREASE_MATCH_COUNT`;
+export const INCREASE_MATCH_COUNT_SUCCESS = `${PREFIX}INCREASE_MATCH_COUNT_SUCCESS`;
+
+export const SET_GAME_LEVEL = `${PREFIX}SET_GAME_LEVEL`;
+export const SET_GAME_LEVEL_SUCCESS = `${PREFIX}SET_GAME_LEVEL_SUCCESS`;
+
+export const GAME_START = `${PREFIX}GAME_START`;
+export const GAME_PAUSE = `${PREFIX}GAME_PAUSE`;
+
+export const ROUND_FINISHED = `${PREFIX}ROUND_FINISHED`;
+
+export const DEDUCT_TIME = `${PREFIX}DEDUCT_TIME`;
 
 
+export const LOAD_GAME_DATA = `${PREFIX}LOAD_GAME_DATA`;
+export const LOAD_GAME_DATA_SUCCESS = `${PREFIX}LOAD_GAME_DATA_SUCCESS`;
+
+export const EXIT = `${PREFIX}EXIT`;
+
+
+export const GAME_ERROR = `${PREFIX}GAME_ERROR`;
+
+
+export const GAME_STATE = {
+    PENDING: 'PENDING',
+    WAITING: 'WAITING',
+    READY: 'READY',
+    IN_PROGRESS: 'IN_PROGRESS',
+    PAUSE: 'PAUSE',
+    FINISHED: 'FINISHED',
+    OVER: 'OVER',
+    ERROR: 'ERROR',
+};
+
+export function goSinglePlayer() {
+    return {
+        type: GO_SINGLE_PLAYER,
+    };
+}
+export function clearCellPicks(payload) {
+    return {
+        type: CLEAR_CELL_PICKS,
+        payload,
+    };
+}
+export function goMultiPlayers() {
+    return {
+        type: GO_MULTI_PLAYERS,
+    };
+}
+export function deductTime(level, sec) {
+    return {
+        type: DEDUCT_TIME,
+        payload: {
+            level,
+            sec
+        },
+    };
+}
+export function gameStart() {
+    return {
+        type: GAME_START,
+    };
+}
+export function gamePause() {
+    return {
+        type: GAME_PAUSE,
+    };
+}
+export function roundFinished() {
+    return {
+        type: ROUND_FINISHED,
+    };
+}
+
+export function setGameState(payload) {
+    return {
+        type: SET_GAME_STATE,
+        payload,
+    };
+}
+export function increaseMatchCount(level) {
+    return {
+        type: INCREASE_MATCH_COUNT,
+        payload: level,
+    };
+}
+export function increaseMatchCountSuccess(level) {
+    return {
+        type: INCREASE_MATCH_COUNT_SUCCESS,
+        payload: level,
+    };
+}
+
+export function setCellMatch(level, cid, data) {
+    return {
+        type: SET_CELL_MATCH,
+        payload: {
+            level,
+            cid,
+            data
+        },
+    };
+}
+export function setCellFlip(level, cid, data) {
+    return {
+        type: SET_CELL_FLIP,
+        payload: {
+            level,
+            cid,
+            data
+        },
+    };
+}
+
+export function setGameLevel(level) {
+    return {
+        type: SET_GAME_LEVEL,
+        payload: level,
+    };
+}
+export function setGameLevelSuccess(level) {
+    return {
+        type: SET_GAME_LEVEL_SUCCESS,
+        payload: level,
+    };
+}
+export function setIsMultiPlayer(payload) {
+    return {
+        type: SET_IS_MULTI_PLAYERS,
+        payload,
+    };
+}
+
+export function loadGameData() {
+    return {
+        type: LOAD_GAME_DATA,
+    };
+}
+export function exit() {
+    return {
+        type: EXIT,
+    };
+}
+
+export function loadGameDataSuccess(payload) {
+    return {
+        type: LOAD_GAME_DATA_SUCCESS,
+        payload
+    };
+}
+export function gameError(error) {
+    return {
+        type: GAME_ERROR,
+        payload: error
+    }
+}

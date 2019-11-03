@@ -37,7 +37,8 @@ module.exports = {
     list: {
         ...headers,
         params: {
-            topicName: Joi.string().required()
+            topicName: Joi.string(),
+            amount: Joi.number()
         }
     }
 };

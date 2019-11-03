@@ -9,9 +9,9 @@ const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
     authentication: combineReducers({
         login,
-        register,
-        game
+        register
     }),
+    game,
 });
 
 export default createRootReducer;
