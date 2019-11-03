@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LessonCard from '../../components/LessonCard';
+import LessonCard from '../LessonCard';
 import './index.scss';
 
 const imgWrapper = [

@@ -34,7 +34,7 @@ const routes = [
   },
   {
     title: 'Lessons',
-    path: '/dashboard/lessons',
+    path: '/dashboard/lessons/:topic',
     exact: true,
     component: Lessons,
   },
