@@ -3,11 +3,11 @@ import NavBar, {NAVBAR_CALLBACK_ENUMS} from '../../components/NavBar';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux"
 import {LOGIN_CALLBACK_ENUMS} from "../../components/Login";
-import {getTopics} from '../Header/header.action';
+import {loadTopics} from '../Header/header.action';
 import {logout} from '../Login/login.action';
 class Header extends React.Component {
     componentDidMount() {
-        this.props.getTopics();
+        this.props.loadTopics();
     }
     callbackHandler = (type, data) => {
         switch (type) {
@@ -37,7 +37,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    getTopics,
+    loadTopics,
     logout
 };
 

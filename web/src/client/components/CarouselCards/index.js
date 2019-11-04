@@ -19,22 +19,16 @@ const wordsArr = ['backpack', 'book', 'compass', 'eraser', 'maker', 'notebook', 
 
 class CarouselCards extends Component {
   render(){
-    const children = imgWrapper.map((imgSrc, i) => {
+    const {lessons} = this.props;
+    const children = lessons.map((lesson, i) => {
       return (
-
-        <div
-          key={i.toString()}
-          // className="img-wrapper"
-          // style={{
-          //   backgroundImage: `url(${src})`,
-          // }}
-        >
+        <div key={i.toString()}>
           <div className="flip-card img-wrapper">
             <div className="flip-card-inner">
               <div className="flip-card-front">
-                <img src={imgSrc} alt="Avatar" style={{width: "250px", height: "300px"}} />
+                <img src={lesson.image} alt="Avatar" style={{width: "250px", height: "300px"}} />
               </div>
-              <div className="flip-card-back">{wordsArr[i]}</div>
+              <div className="flip-card-back">{lesson.word}</div>
             </div>
           </div>
         </div>      

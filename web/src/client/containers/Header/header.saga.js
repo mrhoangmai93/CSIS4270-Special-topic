@@ -5,14 +5,14 @@ import {getProgress} from '../../libs/user.lib';
 function* fetchTopics() {
     try{
         const res = yield call(getProgress);
-        yield put(HEADER_ACTION.loadTopics(res.data));      
+        yield put(HEADER_ACTION.loadTopicsSuccess(res.data));      
     }
     catch (e){
-        console.log(e)
+        yield put(HEADER_ACTION.loadTopicsError((e.response) ? e.response.data.message : 'Load header error'));
     }
 }
 export default function* rootSaga() {
     yield all([
-        takeLatest(HEADER_ACTION.GET_TOPICS, fetchTopics)
+        takeLatest(HEADER_ACTION.LOAD_TOPICS, fetchTopics)
     ]);
 }

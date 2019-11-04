@@ -30,7 +30,6 @@ const RenderMenu = (props) => {
                 })}
 
             </SubMenu>
-            {/* <Menu.Item key="1"><Link to="/dashboard/lessons">Lessons</Link></Menu.Item> */}
             <Menu.Item key="2"><Link to="/dashboard/translation">Translation</Link></Menu.Item>
             <Menu.Item key="3"><Link to="/dashboard/game">Game</Link></Menu.Item>
             <Menu.Item key="4" onClick={logout}>Logout</Menu.Item>
