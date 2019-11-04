@@ -2,7 +2,18 @@ import React from 'react';
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import GamePane, {GAMEPANECALLBACK_ENUMS} from '../../components/GamePane';
-import {exit, goMultiPlayers, goSinglePlayer, gameStart, gamePause, setCellMatch, setCellFlip, increaseMatchCount,clearCellPicks} from './game.action';
+import {
+    exit,
+    goMultiPlayers,
+    goSinglePlayer,
+    gameStart,
+    gamePause,
+    setCellMatch,
+    setCellFlip,
+    increaseMatchCount,
+    clearCellPicks,
+    socketExitGame
+} from './game.action';
 import GameCell, {GAMECELL_CALLBACK_ENUMS} from "../../components/GameCell";
 import {Modal} from "antd";
 
@@ -46,7 +57,7 @@ class Game extends React.Component {
                 });
                 break;
             case GAMECELL_CALLBACK_ENUMS.FLIP_FRONT:
-                if(this.state.cellPicks.length > 0) {
+                if (this.state.cellPicks.length > 0) {
                     const array = [...this.state.cellPicks];
                     const index = array.indexOf(data);
                     if (index !== -1) {
@@ -56,7 +67,7 @@ class Game extends React.Component {
                     const dataId = data.split('-')[0];
                     const word = this.props.gameState.getIn(['gameData', this.props.gameState.get('level'), 'data', `${dataId}-word`, 'isMatch']);
                     const image = this.props.gameState.getIn(['gameData', this.props.gameState.get('level'), 'data', `${dataId}-image`, 'isMatch']);
-                    if(!(word === true && image === true)) this.props.setCellFlip(this.props.gameState.get('level'), data, false);
+                    if (!(word === true && image === true)) this.props.setCellFlip(this.props.gameState.get('level'), data, false);
                 }
                 break;
             case GAMECELL_CALLBACK_ENUMS.FLIP_BACK:
@@ -79,7 +90,7 @@ class Game extends React.Component {
         }
     };
     clearCellPicks = () => {
-    this.setState({cellPicks: []});
+        this.setState({cellPicks: []});
     };
     renderCell = (type, data) => {
         if (type === 'word') return <h3 className="text-lg text-center">{data}</h3>;
@@ -87,7 +98,7 @@ class Game extends React.Component {
     };
     renderBoardCells = () => {
         const data = this.props.gameState.getIn(['gameData', this.props.gameState.get('level'), 'data']);
-        if(data) {
+        if (data) {
             return data.entrySeq().map(e => (<GameCell key={e[0]} cid={e[0]} callbackHandler={this.callbackHandler}
                                                        cellPicks={this.state.cellPicks}
                                                        gameState={this.props.gameState.get('gameState')}
@@ -98,12 +109,18 @@ class Game extends React.Component {
         }
         return <></>;
     };
-    componentWillReceiveProps(nextProps, nextState){
-        if(nextProps.gameState.get('needClearCellPicks')){
+
+    componentWillReceiveProps(nextProps, nextState) {
+        if (nextProps.gameState.get('needClearCellPicks')) {
             this.clearCellPicks();
             this.props.clearCellPicks(false);
         }
     }
+
+    componentWillUnmount() {
+
+    }
+
     render() {
         const {gameState} = this.props;
         return <GamePane gameState={gameState.get('gameState')}
@@ -130,7 +147,8 @@ const mapDispatchToProps = {
     setCellMatch,
     setCellFlip,
     increaseMatchCount,
-    clearCellPicks
+    clearCellPicks,
+    socketExitGame
 };
 
 export default withRouter(
