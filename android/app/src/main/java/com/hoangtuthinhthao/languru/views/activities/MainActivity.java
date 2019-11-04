@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 sessionControl.setJwtToken(null);
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
+            case R.id.AI :
+                startActivity(new Intent(MainActivity.this, AIActivity.class));
+                break;
         }
 
         return true;

@@ -1,17 +1,26 @@
 import {
-    all, put, call, takeLatest, takeEvery,take, select
+    all, put, call, takeLatest, takeEvery, take, select
 } from 'redux-saga/effects';
 import {eventChannel, END} from 'redux-saga';
 import {sumBy} from 'lodash';
 import * as GAME_ACTION from "./game.action";
 import {getRandomWords} from '../../libs/lesson.lib';
 import {GAME_LEVEL} from '../../config/constants';
+
 localStorage.iv = undefined;
 
-    function* handleSinglePlayer() {
+function* handleSinglePlayer() {
     try {
         yield put(GAME_ACTION.setIsMultiPlayer(false));
         yield put(GAME_ACTION.loadGameData());
+    } catch (e) {
+        yield put(GAME_ACTION.gameError((e)));
+    }
+}
+
+function* handleMultiPlayers() {
+    try {
+
     } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
     }
@@ -27,7 +36,7 @@ function countdown(current) {
                     emitter(END);
                 }
             }, 1000);
-        localStorage.iv = iv;
+            localStorage.iv = iv;
             return () => {
                 clearInterval(iv);
                 localStorage.iv = undefined;
@@ -35,6 +44,7 @@ function countdown(current) {
         }
     )
 }
+
 function* handleGameStart() {
     try {
         clearInterval(localStorage.iv);
@@ -50,12 +60,13 @@ function* handleGameStart() {
             }
         } finally {
             const timeLimit = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'timeLeft']));
-            if(timeLimit === 0) yield put(GAME_ACTION.roundFinished());
+            if (timeLimit === 0) yield put(GAME_ACTION.roundFinished());
         }
     } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleStopTimer() {
     try {
         clearInterval(localStorage.iv);
@@ -64,6 +75,7 @@ function* handleStopTimer() {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleGamePause() {
     try {
         clearInterval(localStorage.iv);
@@ -74,13 +86,14 @@ function* handleGamePause() {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleRoundFinished() {
     try {
         const getCurrentLevel = yield select(state => state.game.get('level'));
         const totalMatches = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'totalMatches']));
         const amount = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'amount']));
-        if(totalMatches === amount) {
-            if(GAME_LEVEL.length - 1 > getCurrentLevel) yield put(GAME_ACTION.setGameLevel(getCurrentLevel + 1));
+        if (totalMatches === amount) {
+            if (GAME_LEVEL.length - 1 > getCurrentLevel) yield put(GAME_ACTION.setGameLevel(getCurrentLevel + 1));
             else {
                 clearInterval(localStorage.iv);
                 localStorage.iv = undefined;
@@ -92,36 +105,39 @@ function* handleRoundFinished() {
             yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.OVER));
         }
 
-    }catch (e) {
+    } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleSetGameLevel({payload}) {
     try {
         yield put(GAME_ACTION.setGameLevelSuccess(payload));
         yield put(GAME_ACTION.clearCellPicks(true));
         yield put(GAME_ACTION.gameStart());
-    }catch (e) {
+    } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleWordMatch({payload}) {
     try {
         yield put(GAME_ACTION.increaseMatchCountSuccess(payload));
         const totalMatches = yield select(state => state.game.getIn(['gameData', payload, 'totalMatches']));
         const amount = yield select(state => state.game.getIn(['gameData', payload, 'amount']));
-        if(amount === totalMatches) {
-            if(GAME_LEVEL.length - 1 > payload) yield put(GAME_ACTION.setGameLevel(payload + 1));
+        if (amount === totalMatches) {
+            if (GAME_LEVEL.length - 1 > payload) yield put(GAME_ACTION.setGameLevel(payload + 1));
             else {
                 clearInterval(localStorage.iv);
                 localStorage.iv = undefined;
                 yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.FINISHED));
             }
         }
-    }catch (e) {
+    } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
     }
 }
+
 function* handleLoadGameData() {
     try {
         const res = yield call(getRandomWords, sumBy(GAME_LEVEL, level => level.amount));
@@ -160,9 +176,11 @@ function* handleLoadGameData() {
         yield put(GAME_ACTION.gameError((e.response) ? e.response.data.message : 'Connection error'));
     }
 }
+
 export default function* rootSaga() {
     yield all([
         takeEvery(GAME_ACTION.GO_SINGLE_PLAYER, handleSinglePlayer),
+        takeEvery(GAME_ACTION.GO_MULTI_PLAYERS, handleMultiPlayers),
         takeEvery(GAME_ACTION.LOAD_GAME_DATA, handleLoadGameData),
         takeEvery(GAME_ACTION.GAME_START, handleGameStart),
         takeEvery(GAME_ACTION.GAME_PAUSE, handleGamePause),
