@@ -6,8 +6,8 @@ export const GAME_LEVEL = [{
     time: 60
 }, {
     amount: 12,
-    time: 120
+    time: 100
 }, {
     amount: 24,
-    time: 300
+    time: 200
 }];
