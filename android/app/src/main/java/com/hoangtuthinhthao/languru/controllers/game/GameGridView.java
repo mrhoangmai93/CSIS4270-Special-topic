@@ -4,9 +4,12 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.GridView;
+
+import com.hoangtuthinhthao.languru.controllers.helpers.GameCardAnimation;
 
 
 public class GameGridView extends GridView {
@@ -36,6 +39,7 @@ public class GameGridView extends GridView {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
+
 
     private void init(final Context context) {
         gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -86,6 +90,9 @@ public class GameGridView extends GridView {
         } else if (action == MotionEvent.ACTION_DOWN) {
             mTouchX = ev.getX();
             mTouchY = ev.getY();
+
+           // GameCardAnimation.flip();
+
         } else {
 
             if (mFlingConfirmed) {
@@ -94,10 +101,8 @@ public class GameGridView extends GridView {
 
             float dX = (Math.abs(ev.getX() - mTouchX));
             float dY = (Math.abs(ev.getY() - mTouchY));
-//            if ((dX > SWIPE_MIN_DISTANCE) || (dY > SWIPE_MIN_DISTANCE)) {
-//                mFlingConfirmed = true;
-//                return true;
-//            }
+
+            Log.i("touch", "touch");
         }
 
         return super.onInterceptTouchEvent(ev);
