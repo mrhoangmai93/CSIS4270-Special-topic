@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.game.CreateGameBoard;
+import com.hoangtuthinhthao.languru.controllers.game.GameGridView;
 import com.hoangtuthinhthao.languru.controllers.helpers.GameCardAnimation;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 
@@ -152,8 +153,10 @@ public class GamePracticeFragment extends Fragment {
                 }, 1500);
             }
         });
-        CreateGameBoard gb = new CreateGameBoard();
-        gb.createGame(getActivity(), wordList, 1);
+        GameGridView mGridView = view.findViewById(R.id.gameBoardGrid);
+
+        CreateGameBoard gb = new CreateGameBoard(getContext(), mGridView);
+        gb.createGame( wordList, 1);
     }
 
     @Override

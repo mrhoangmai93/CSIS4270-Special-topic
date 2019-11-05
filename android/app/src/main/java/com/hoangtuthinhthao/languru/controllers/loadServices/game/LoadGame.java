@@ -26,7 +26,6 @@ public class LoadGame {
 
     public void byNumberWord(final int numberWord, final LoadLessonCallback callback) {
         Call<ArrayList<Lesson>> call = apiInterface.getByNumberWord(numberWord);
-
         call.enqueue(new Callback<ArrayList<Lesson>>() {
             @Override
             public void onResponse(Call<ArrayList<Lesson>> call, Response<ArrayList<Lesson>> response) {

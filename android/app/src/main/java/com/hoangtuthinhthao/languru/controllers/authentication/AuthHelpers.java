@@ -36,9 +36,10 @@ public class AuthHelpers {
                 if(response.isSuccessful()){
                     response.body(); // have your all data
                     List<Session> sessions = response.body().getSessions();
+                    //Log.i("header",response.headers().toString());
                     String token = "";
                     if(sessions != null)
-                        token = sessions.get(0).getAccessToken();
+                        token = sessions.get(sessions.size()-1).getAccessToken();
 
                     Intent intent = new Intent();
                     intent.setAction(REGISTER_DONE);
@@ -87,7 +88,7 @@ public class AuthHelpers {
                     List<Session> sessions = response.body().getSessions();
                     String token = "";
                     if(sessions != null)
-                         token = sessions.get(0).getAccessToken();
+                        token = sessions.get(sessions.size()-1).getAccessToken();
 
                     Intent intent = new Intent();
                     intent.setAction(LOGIN_DONE);

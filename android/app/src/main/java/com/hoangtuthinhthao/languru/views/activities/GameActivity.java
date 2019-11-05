@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.hoangtuthinhthao.languru.R;
@@ -48,7 +49,7 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
 
             @Override
             public void failLoadLesson(String message) {
-
+                Log.i("failed", message);
             }
         };
     }
@@ -58,6 +59,7 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
     public void onGameItemClick(int id) {
         switch (id) {
             case  R.id.btnPractice:
+
                 gameLoader.byNumberWord(6, callback);
 
                 break;
