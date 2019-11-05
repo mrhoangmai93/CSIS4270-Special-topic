@@ -2,9 +2,13 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import CarouselCards from '../../components/CarouselCards';
-import {loadLessons} from '../Lessons/lessons.action';
+import {loadLessons, setProgress} from '../Lessons/lessons.action';
+import ProgressBar from '../../components/ProgressBar';
 
 class Lessons extends Component{
+    state = {
+        progress: 0,
+    }
     componentDidMount() {
         const topic = this.props.match.params.topic;
         this.props.loadLessons(topic);
@@ -16,7 +20,8 @@ class Lessons extends Component{
     }
     render(){
         return (
-            <div>
+            <div className="lessonContainer">
+                <ProgressBar progress={this.state.progress}/>
                 <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
                     <CarouselCards lessons={this.props.lessons}/>
                 </div>
@@ -25,11 +30,13 @@ class Lessons extends Component{
     }
 }
 const mapStateToProps = state => ({
-    lessons: state.lessons.get("lessons")
+    lessons: state.lessons.get("lessons"),
+    progress: state.lessons.get("progress")
 });
 
 const mapDispatchToProps = {
-    loadLessons
+    loadLessons,
+    setProgress,
 };
 
 export default withRouter(
