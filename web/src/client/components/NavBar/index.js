@@ -1,19 +1,35 @@
 import React, {Component} from 'react';
-import {Menu} from "antd";
+import {Menu, Icon} from "antd";
 import {Link} from 'react-router-dom';
+const { SubMenu } = Menu;
 const VIEW_CALLBACK_ENUMS = {
     LOGOUT: 'LOGOUT'
 };
 
 const RenderMenu = (props) => {
-    const {isAuthenticated, key, logout} = props;
+    const {isAuthenticated, key, logout, topics} = props;
     if (isAuthenticated) {
         return <Menu
             theme="dark"
             mode="horizontal"
             style={{lineHeight: '64px', textAlign: 'right'}}
         >
-            <Menu.Item key="1"><Link to="/dashboard/lessons">Lessons</Link></Menu.Item>
+            <SubMenu
+                title={
+                    <span className="submenu-title-wrapper">
+                    Lessons<Icon type="down" /></span>
+                }
+            >
+                {topics.map((topic,i) => {
+                    const topicName = topic.topic;
+                    const capitalizedTopic = topicName.charAt(0).toUpperCase() + topicName.slice(1)
+                    return (
+                        <Menu.Item key={`lesson:${i}`}>
+                            <Link to={`/dashboard/lessons/${topicName}`}>{capitalizedTopic}</Link>
+                        </Menu.Item>)
+                })}
+
+            </SubMenu>
             <Menu.Item key="2"><Link to="/dashboard/translation">Translation</Link></Menu.Item>
             <Menu.Item key="3"><Link to="/dashboard/game">Game</Link></Menu.Item>
             <Menu.Item key="4" onClick={logout}>Logout</Menu.Item>
@@ -43,9 +59,13 @@ class NavBar extends Component {
     };
 
     render() {
-        const {isAuthenticated} = this.props;
+        const {isAuthenticated, topics} = this.props;
 
-        return <RenderMenu isAuthenticated={isAuthenticated} key={this.state.key} logout={this.handleLogout}/>;
+        return <RenderMenu 
+            isAuthenticated={isAuthenticated} 
+            key={this.state.key} 
+            logout={this.handleLogout}
+            topics={topics}/>;
 
     }
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Button} from 'antd';
 import PropTypes from 'prop-types';
 import './index.scss';
 
@@ -232,6 +233,10 @@ class LessonCard extends Component {
               </div>
             </div>
           </div>
+          {/* <Icon type="left-circle" />
+          <Icon type="right-circle" /> */}
+          <Button shape="circle" icon="left"  style={{paddingTop: "-12px"}}/>
+          <Button shape="circle" icon="right" />
         </div>
       );
     }

@@ -1,30 +1,27 @@
 Promise = require('bluebird');
 const app = require('./server');
-const socket = require('socket.io');
 
 const server = require('http').Server(app);
-const io = socket(server);
+
+
+require('./socket')(server);
+
+/*global.io = io;*/
 
 const {
-    port, env
+    port, env, redis
 } = require('./config');
-const database = require('./database');
+const database = require('./bootstrap/database');
 
 // Connect mongoDB server
 database.connect();
+
+
 
 // Connect Socket.IO
 app.use((req, res, next) => {
     res.io = io;
     next();
-});
-
-io.on('connection', socket => {
-    console.log('User connected');
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected')
-    })
 });
 
 
