@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -23,8 +21,8 @@ import android.widget.Toast;
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
-import com.hoangtuthinhthao.languru.controllers.loadServices.LoadLesson;
-import com.hoangtuthinhthao.languru.controllers.loadServices.LoadLessonCallback;
+import com.hoangtuthinhthao.languru.controllers.loadServices.lesson.LoadLesson;
+import com.hoangtuthinhthao.languru.controllers.loadServices.lesson.LoadLessonCallback;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 import com.hoangtuthinhthao.languru.views.fragments.LessonFragment;
 import com.hoangtuthinhthao.languru.views.fragments.OnFragmentInteractionListener;
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Fragment
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private TopicFragment topicFragment;
 
     // load lesson
     private LoadLesson loadLesson;
@@ -131,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 sessionControl.setJwtToken(null);
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
+            case R.id.gameCenter :
+                startActivity(new Intent(MainActivity.this, GameActivity.class));
             case R.id.AI :
                 startActivity(new Intent(MainActivity.this, AIActivity.class));
                 break;
