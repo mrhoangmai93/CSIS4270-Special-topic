@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.gameCenter :
                 startActivity(new Intent(MainActivity.this, GameActivity.class));
+                break;
             case R.id.AI :
                 startActivity(new Intent(MainActivity.this, AIActivity.class));
                 break;
