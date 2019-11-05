@@ -235,8 +235,8 @@ class LessonCard extends Component {
           </div>
           {/* <Icon type="left-circle" />
           <Icon type="right-circle" /> */}
-          <Button shape="circle" icon="left"  style={{paddingTop: "-12px"}}/>
-          <Button shape="circle" icon="right" />
+          {/* <Button shape="circle" icon="left"  style={{paddingTop: "-12px"}}/>
+          <Button shape="circle" icon="right" /> */}
         </div>
       );
     }

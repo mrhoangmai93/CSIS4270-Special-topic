@@ -8,7 +8,7 @@ const statuses = {
 };
 
 const RoomSchema = new mongoose.Schema({
-    code: { type: Number, required: true, unique: true },
+    code: { type: String, required: true, unique: true },
     players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RoomPlayer' }],
     status: {
         type: String,

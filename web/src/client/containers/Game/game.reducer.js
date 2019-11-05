@@ -24,6 +24,11 @@ export default function (state = initialState, {type, payload}) {
             });
         case ActionType.SET_GAME_STATE:
             return state.set('gameState', payload);
+        case ActionType.GO_MULTI_PLAYERS:
+            return state.merge({
+                isMultiPlayer: true,
+                gameState: ActionType.GAME_STATE.MULTI_BOARD,
+            });
         case ActionType.SET_GAME_LEVEL_SUCCESS:
             return state.set('level', payload);
         case ActionType.DEDUCT_TIME:

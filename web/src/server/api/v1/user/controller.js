@@ -311,7 +311,9 @@ exports.addWord = async (req, res, next) => {
                         }
                     }
                 }, {new: true}).exec();
-            return res.json(updatedUser.transform());
+
+            const result = await getTopicProcess(topic, updatedUser);
+            return res.json(result);
         }
     } catch (error) {
         return next(error);
@@ -336,17 +338,21 @@ exports.getProgress = async (req, res, next) => {
             topics = [topic];
         }
         const results = await Promise.all(topics.map(async (t) => {
-            const total = await Lesson.countDocuments({topic: t}).exec();
-            const learnedWordsFilter = req.user.learnedWords ? req.user.learnedWords.filter(w => w.topic === t) : [];
-            const learnedCount = learnedWordsFilter.length || 0;
-            const progress = ((learnedCount / total) * 100).toFixed(2);
-            return {
-                topic: t,
-                progress
-            }
+            return this.getTopicProcess(t, req.user);
         }));
         res.json(results);
     } catch (error) {
         return next(error);
     }
-}
+};
+
+exports.getTopicProcess = async (topic, user) => {
+    const total = await Lesson.countDocuments({topic}).exec();
+    const learnedWordsFilter = user.learnedWords ? user.learnedWords.filter(w => w.topic === topic) : [];
+    const learnedCount = learnedWordsFilter.length || 0;
+    const progress = ((learnedCount / total) * 100).toFixed(2);
+    return {
+        topic,
+        progress
+    }
+};

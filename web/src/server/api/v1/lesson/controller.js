@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const Lesson = require('./model');
 const {Error} = require('../../../utils/api-response');
-
+const {getTopicProcess} = require('../user/controller');
 /**
  * Load lesson and append to req.
  * @public
@@ -46,7 +46,11 @@ exports.listByTopic = async (req, res, next) => {
         const {topicName} = req.params;
         const list = await Lesson.find({topic: topicName}).exec();
         const listTransformed = list.map(lesson => lesson.transform());
-        res.json(listTransformed);
+        const process = await getTopicProcess(topicName, req.user);
+        res.json({
+            ...process,
+            list: listTransformed
+        });
     } catch (error) {
         return next(Error({
             message: 'Get list by topic failed',

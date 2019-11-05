@@ -4,6 +4,7 @@ import * as ActionType from './lessons.action';
 const initialState = Immutable.fromJS({
     lessons: [],
     isLoading: false,
+    progress: {}
 });
 
 const reducer = (state = initialState, {type, payload}) => {
@@ -15,6 +16,8 @@ const reducer = (state = initialState, {type, payload}) => {
                 lessons: payload,
                 isLoading: false,
             });
+        case ActionType.SET_PROGRESS_SUCCESS: 
+            return state.set('progress', payload);
         default:
             return state;
      }

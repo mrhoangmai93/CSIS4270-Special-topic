@@ -22,11 +22,9 @@ const ioEvents = function(io) {
  */
 const init = function(server){
 
-    const io 		= require('socket.io')(server);
+    const io = require('socket.io')(server);
 
-    // Force Socket.io to ONLY use "websockets"; No Long Polling.
     io.set('transports', ['polling', 'websocket']);
-    console.log('socket server running');
     // Using Redis
     let port = redis.client.port;
     let host = redis.client.host;
