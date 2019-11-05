@@ -338,7 +338,7 @@ exports.getProgress = async (req, res, next) => {
             topics = [topic];
         }
         const results = await Promise.all(topics.map(async (t) => {
-            return getTopicProcess(t, req.user);
+            return this.getTopicProcess(t, req.user);
         }));
         res.json(results);
     } catch (error) {
