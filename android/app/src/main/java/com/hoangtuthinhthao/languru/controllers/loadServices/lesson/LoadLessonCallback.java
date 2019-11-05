@@ -1,4 +1,4 @@
-package com.hoangtuthinhthao.languru.controllers.loadServices;
+package com.hoangtuthinhthao.languru.controllers.loadServices.lesson;
 
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 
