@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, Card} from 'antd';
 import {Icon} from "antd";
+import {generateRandom} from '../../../server/utils/methods';
 import {GAME_STATE} from "../../containers/Game/game.action";
 
 const GameActions = (props) => (

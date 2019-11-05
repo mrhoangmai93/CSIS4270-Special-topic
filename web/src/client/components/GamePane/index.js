@@ -3,6 +3,9 @@ import {GAME_STATE} from "../../containers/Game/game.action";
 import {Button, Modal, Skeleton} from 'antd';
 import WrappedLoginForm from "../Login";
 import GameBoard from "../GameBoard";
+import CreateNewGame from '../../components/CreateNewGame';
+import JoinAGame from '../../components/JoinAGame';
+
 const VIEW_CALLBACK_ENUMS = {
     START: 'START',
     PAUSE: 'PAUSE',
@@ -12,6 +15,12 @@ const VIEW_CALLBACK_ENUMS = {
     BACK: 'BACK',
 };
 
+const BackButton = (props) => (
+    <Button type="danger" shape="round" icon="close" size="large"
+            className="mx-auto block mt-5" onClick={props.handleBack}>
+        Exit
+    </Button>
+);
 class GamePane extends React.Component {
     componentDidMount() {
 
@@ -39,6 +48,12 @@ class GamePane extends React.Component {
     handlePauseGame = () => {
         this.props.callbackHandler(VIEW_CALLBACK_ENUMS.PAUSE, undefined);
     };
+    handleCreateNewGame = (values) => {
+        console.log(values);
+    };
+    handleJoinAGame = (values) => {
+        console.log(values);
+    };
     renderGameState = (state) => {
         switch (state) {
             case GAME_STATE.PENDING:
@@ -63,6 +78,23 @@ class GamePane extends React.Component {
                         </div>
                     </>
                 );
+            case GAME_STATE.MULTI_BOARD:
+                return <>
+                    <h1 className="text-3xl mb-5 text-center">Please select either create a new game or join a game</h1>
+                    <div className="flex mb-4 flex-wrap mb-5">
+                        <div className="w-full lg:w-1/2 p-4">
+                            <div className="border-dotted border-4 border-gray-600 p-3">
+                                <CreateNewGame handleSubmit={this.handleCreateNewGame} />
+                            </div>
+                        </div>
+                        <div className="w-full lg:w-1/2 p-4">
+                            <div className="border-dotted border-4 border-gray-600 p-3">
+                                <JoinAGame handleSubmit={this.handleJoinAGame} />
+                            </div>
+                        </div>
+                    </div>
+                    <BackButton handleBack={this.handleBack} />
+                </>;
             case GAME_STATE.WAITING:
                 break;
             case GAME_STATE.ERROR:
@@ -72,10 +104,7 @@ class GamePane extends React.Component {
                             <h1 className="text-xl text-center text-orange-500">{this.props.error}</h1>
                             <h1 className="text-xl text-center text-orange-500">Please restart the game!</h1>
                         </div>
-                        <Button type="danger" shape="round" icon="close" size="large"
-                                className="mx-auto block mt-5" onClick={this.handleBack}>
-                            Exit
-                        </Button>
+                        <BackButton handleBack={this.handleBack} />
                     </>
                 );
             case GAME_STATE.READY:
@@ -83,10 +112,12 @@ class GamePane extends React.Component {
             case GAME_STATE.PAUSE:
             case GAME_STATE.FINISHED:
             case GAME_STATE.OVER:
-                return <GameBoard currentLevel={this.props.currentLevel} timeLeft={this.props.timeLeft} handleExit={this.handleExit}
+                return <GameBoard currentLevel={this.props.currentLevel} timeLeft={this.props.timeLeft}
+                                  handleExit={this.handleExit}
                                   handleStartGame={this.handleStartGame}
                                   handleBack={this.handleBack}
-                                  handlePauseGame={this.handlePauseGame} gameState={state} >{this.props.renderBoardCells()}</GameBoard>;
+                                  handlePauseGame={this.handlePauseGame}
+                                  gameState={state}>{this.props.renderBoardCells()}</GameBoard>;
             default:
                 return <></>;
         }
@@ -94,7 +125,9 @@ class GamePane extends React.Component {
 
     render() {
         const {gameState, isLoading} = this.props;
-        return <Skeleton loading={isLoading}><div className="mt-4">{this.renderGameState(gameState)}</div></Skeleton>;
+        return <Skeleton loading={isLoading}>
+            <div className="mt-4">{this.renderGameState(gameState)}</div>
+        </Skeleton>;
     }
 }
 

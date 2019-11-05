@@ -61,5 +61,5 @@ function* startup() {
 }
 
 export default function* watcher() {
-    yield takeLatest(GAME_ACTION.GO_MULTI_PLAYERS, startup)
+    // yield takeLatest(GAME_ACTION.GO_MULTI_PLAYERS, startup)
 }

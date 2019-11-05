@@ -127,6 +127,7 @@ class Game extends React.Component {
                          callbackHandler={this.callbackHandler}
                          error={gameState.get('error')}
                          currentLevel={gameState.get('level')}
+                         isMultiPlayer={gameState.get('isMultiPlayer')}
                          isLoading={gameState.get('isLoading')}
                          renderBoardCells={this.renderBoardCells}
                          timeLeft={this.props.gameState.getIn(['gameData', this.props.gameState.get('level'), 'timeLeft'])}

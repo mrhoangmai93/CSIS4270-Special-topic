@@ -346,7 +346,7 @@ exports.getProgress = async (req, res, next) => {
     }
 };
 
-const getTopicProcess = async (topic, user) => {
+exports.getTopicProcess = async (topic, user) => {
     const total = await Lesson.countDocuments({topic}).exec();
     const learnedWordsFilter = user.learnedWords ? user.learnedWords.filter(w => w.topic === topic) : [];
     const learnedCount = learnedWordsFilter.length || 0;
