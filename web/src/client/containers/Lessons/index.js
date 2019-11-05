@@ -23,7 +23,9 @@ class Lessons extends Component{
             <div className="lessonContainer">
                 <ProgressBar progress={this.state.progress}/>
                 <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                    <CarouselCards lessons={this.props.lessons}/>
+                    {this.props.lessons && this.props.lessons.list &&
+                        <CarouselCards lessons={this.props.lessons.list}/>
+                    }
                 </div>
             </div>
         );
