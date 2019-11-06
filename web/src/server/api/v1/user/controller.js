@@ -312,14 +312,23 @@ exports.addWord = async (req, res, next) => {
                     }
                 }, {new: true}).exec();
 
-            const result = await getTopicProcess(topic, updatedUser);
+            const result = await this.getTopicProcess(topic, updatedUser);
             return res.json(result);
         }
     } catch (error) {
         return next(error);
     }
 };
-
+exports.getTopicProcess = async (topic, user) => {
+    const total = await Lesson.countDocuments({topic}).exec();
+    const learnedWordsFilter = user.learnedWords ? user.learnedWords.filter(w => w.topic === topic) : [];
+    const learnedCount = learnedWordsFilter.length || 0;
+    const progress = ((learnedCount / total) * 100).toFixed(2);
+    return {
+        topic,
+        progress
+    }
+};
 /**
  * Get progress of user
  * @public
@@ -343,16 +352,5 @@ exports.getProgress = async (req, res, next) => {
         res.json(results);
     } catch (error) {
         return next(error);
-    }
-};
-
-exports.getTopicProcess = async (topic, user) => {
-    const total = await Lesson.countDocuments({topic}).exec();
-    const learnedWordsFilter = user.learnedWords ? user.learnedWords.filter(w => w.topic === topic) : [];
-    const learnedCount = learnedWordsFilter.length || 0;
-    const progress = ((learnedCount / total) * 100).toFixed(2);
-    return {
-        topic,
-        progress
     }
 };
