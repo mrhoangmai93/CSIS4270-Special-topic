@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import CarouselCards from '../../components/CarouselCards';
-import {loadLessons, setProgress} from '../Lessons/lessons.action';
+import {loadLessons } from '../Lessons/lessons.action';
 import ProgressBar from '../../components/ProgressBar';
 
 class Lessons extends Component{
-    state = {
-        progress: 0,
-    }
     componentDidMount() {
         const topic = this.props.match.params.topic;
         this.props.loadLessons(topic);
@@ -19,12 +16,24 @@ class Lessons extends Component{
         }
     }
     render(){
+        let progressPercent;
+        const domainTopic = this.props.match.params.topic;
+        const progressTopic = this.props.progress.topic;
+        if(domainTopic === progressTopic){
+            progressPercent = 
+                (Number(this.props.progress.progress) > Number(this.props.lessons.progress))? 
+                Number(this.props.progress.progress) 
+                : Number(this.props.lessons.progress)
+        }
+        else progressPercent = Number(this.props.lessons.progress)
         return (
             <div className="lessonContainer">
-                <ProgressBar progress={this.state.progress}/>
+                <ProgressBar 
+                    progress={progressPercent}
+                />
                 <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
                     {this.props.lessons && this.props.lessons.list &&
-                        <CarouselCards lessons={this.props.lessons.list}/>
+                        <CarouselCards lessons={this.props.lessons.list} updateProgress={this.updateProgress}/>
                     }
                 </div>
             </div>
@@ -38,7 +47,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     loadLessons,
-    setProgress,
 };
 
 export default withRouter(
