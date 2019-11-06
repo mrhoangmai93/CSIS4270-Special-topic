@@ -1,5 +1,6 @@
 package com.hoangtuthinhthao.languru.controllers.adapters.game;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,26 +8,38 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.adapters.ItemClickListener;
+import com.hoangtuthinhthao.languru.controllers.helpers.GameCardAnimation;
+import com.hoangtuthinhthao.languru.models.game.Game;
+import com.hoangtuthinhthao.languru.models.game.GameCell;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GameBoardAdapter extends BaseAdapter {
-    private ArrayList<Button> mButtons = null;
+   // private ArrayList<Button> mButtons = null;
+    private Game game;
     private int mColumnWidth, mColumnHeight;
+    private ItemClickListener mListener;
+    private ArrayList<GameCell> cells;
 
-    public GameBoardAdapter(ArrayList<Button> buttons, int columnWidth, int columnHeight) {
-        mButtons = buttons;
+    public GameBoardAdapter(Game game, int columnWidth, int columnHeight, ItemClickListener callback) {
+       // mButtons = buttons;
+        this.game = game;
+        cells = game.getCardList();
+        Collections.shuffle(cells);
         mColumnWidth = columnWidth;
         mColumnHeight = columnHeight;
+        this.mListener = callback;
     }
 
     @Override
     public int getCount() {
-        return mButtons.size();
+        return game.getCardList().size();
     }
 
     @Override
-    public Object getItem(int position) {return (Object) mButtons.get(position);}
+    public Object getItem(int position) {return (Object) game.getCardList().get(position).getView();}
 
     @Override
     public long getItemId(int position) {
@@ -34,40 +47,26 @@ public class GameBoardAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Button button;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final Button button = cells.get(position).getView();
+//        if (convertView == null) {
+//            button = mButtons.get(position);
+//        } else {
+//            button = (Button) convertView;
+//        }
 
-        if (convertView == null) {
-            button = mButtons.get(position);
-        } else {
-            button = (Button) convertView;
-        }
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(v, position);
+            }
+        });
 
-        View view = convertView;
-        ViewHolder holder;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            //here is where you inflate your layout containing your viewflipper
-            view = inflater.inflate(R.layout.game_item, null);
-
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-
-//        //reference the viewFlipper
-//        ViewFlipper flipper = (viewFlipper) holder.findViewById(R.id.my_view_flipper);
-//        //your front layout should be set to displayed be default
-//
-//
-//        //now you can get get references to your textview or ImageViews contained within the layout
-//        TextView name = (TextView) holder.findViewById(R.id.name);
-//        name.setText("your text");
 
         android.widget.AbsListView.LayoutParams params =
                 new android.widget.AbsListView.LayoutParams(mColumnWidth, mColumnHeight);
         button.setLayoutParams(params);
+
 
         return button;
     }

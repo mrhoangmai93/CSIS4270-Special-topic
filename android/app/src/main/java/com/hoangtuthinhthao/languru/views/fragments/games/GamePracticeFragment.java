@@ -1,10 +1,6 @@
 package com.hoangtuthinhthao.languru.views.fragments.games;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,19 +10,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.adapters.ItemClickListener;
 import com.hoangtuthinhthao.languru.controllers.game.CreateGameBoard;
+import com.hoangtuthinhthao.languru.controllers.game.GameCalculation;
 import com.hoangtuthinhthao.languru.controllers.game.GameGridView;
 import com.hoangtuthinhthao.languru.controllers.helpers.GameCardAnimation;
+import com.hoangtuthinhthao.languru.models.game.Game;
+import com.hoangtuthinhthao.languru.models.game.GameCell;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,37 +47,26 @@ public class GamePracticeFragment extends Fragment {
 
     private long startTime = 0;
     //timer Textview
-    private TextView timerTextView;
+    private TextView timerTextView, txtLevel;
     private Button btnTimer;
+
+    private ImageView backBtn;
+
+    //Game item click listener
+    ItemClickListener itemClickListener;
 
     Handler handler = new Handler();
 
-    long remainTime = 120000;
+    long remainTime = 60000;
     //Declare timer
     CountDownTimer cTimer = null;
 
-    //start timer function
-    void startTimer() {
-        cTimer = new CountDownTimer(remainTime, 1000) {
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) (millisUntilFinished / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-
-                timerTextView.setText(String.format("%d:%02d", minutes, seconds));
-                remainTime = millisUntilFinished;
-            }
-            public void onFinish() {
-            }
-        };
-        cTimer.start();
-    }
-
-    //cancel timer
-    void cancelTimer() {
-        if(cTimer!=null)
-            cTimer.cancel();
-    }
+    private CreateGameBoard gb;
+    private Game game;
+    private int row;
+    private int column;
+    private int level = 1;
+    private  boolean isGameRunning = false;
 
     public GamePracticeFragment() {
         // Required empty public constructor
@@ -106,6 +95,28 @@ public class GamePracticeFragment extends Fragment {
         if (getArguments() != null) {
             numberOfWord = getArguments().getInt(ARG_PARAM1, 6);
             wordList = (ArrayList<Lesson>) getArguments().getSerializable(ARG_PARAM2);
+            //shuffle the wod list
+
+            switch (numberOfWord) {
+                case 10 :
+                    row = 4;
+                    column = 5;
+                    level = 2;
+                    remainTime = 120000;
+                    break;
+                case 15:
+                    row = 5;
+                    column = 6;
+                    level = 3;
+                    remainTime = 240000;
+                    break;
+                    default:
+                        row = 3;
+                        column = 4;
+                        level = 1;
+                        remainTime = 60000;
+                        break;
+            }
         }
     }
 
@@ -121,6 +132,9 @@ public class GamePracticeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         timerTextView = view.findViewById(R.id.timerTextView);
         btnTimer = view.findViewById(R.id.btnIimer);
+        txtLevel = view.findViewById(R.id.txtLevel);
+        backBtn = view.findViewById(R.id.btnBack);
+        txtLevel.setText("Level: " + level);
 
         btnTimer.setText("start");
         btnTimer.setOnClickListener(new View.OnClickListener() {
@@ -128,35 +142,62 @@ public class GamePracticeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Button b = (Button) v;
-                if (b.getText().equals("stop")) {
+                if (b.getText().equals("pause")) {
                     cancelTimer();
                     b.setText("start");
+                    isGameRunning = false;
                 } else {
                     startTimer();
-                    b.setText("stop");
+                    b.setText("pause");
+                    isGameRunning = true;
                 }
             }
         });
+        //set the timer text
+        setTextForTimer(remainTime);
 
-        final ImageView img = view.findViewById(R.id.img);
-                img.setOnClickListener(new View.OnClickListener() {
+
+        GameGridView mGridView = view.findViewById(R.id.gameBoardGrid);
+        //Create Game object
+        game = new Game(getContext(), row, column, wordList);
+        final GameCalculation gameCalculation = new GameCalculation(getContext(), game);
+
+        // Initialize item Click of cell
+        itemClickListener = new ItemClickListener() {
             @Override
-            public void onClick(View view) {
-                GameCardAnimation.flip(img, R.drawable.ic_game);
-                handler.postDelayed(new Runnable() {
+            public void onItemClick(View view, int position) {
+                if(isGameRunning)
+                    gameCalculation.setCellClick(view, position);
 
-                    @Override
-                    public void run() {
-                        GameCardAnimation.flip(img, R.drawable.ic_email);
-                    }
+            }
 
-                }, 1500);
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        };
+        //initial game complete call back
+        GameCalculation.GameCompleteCallback completeCallback = new GameCalculation.GameCompleteCallback() {
+            @Override
+            public void onGameComplete() {
+                Toast.makeText(getContext(), "Level Complete", Toast.LENGTH_SHORT).show();
+                mListener.onGameComplete(numberOfWord);
+            }
+        };
+        gameCalculation.setCallback(completeCallback);
+
+        //Create Game
+        gb = new CreateGameBoard(getContext(), mGridView, itemClickListener);
+
+        gb.createGame( game, row, column);
+
+        //back button pressed
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
-        GameGridView mGridView = view.findViewById(R.id.gameBoardGrid);
-
-        CreateGameBoard gb = new CreateGameBoard(getContext(), mGridView);
-        gb.createGame( wordList, 1);
     }
 
     @Override
@@ -176,5 +217,49 @@ public class GamePracticeFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Start Game Function
+     */
+    private void startGame() {
 
+    }
+
+    /**
+     *     start timer function
+     */
+    void startTimer() {
+        cTimer = new CountDownTimer(remainTime, 1000) {
+            public void onTick(long millisUntilFinished) {
+                setTextForTimer(millisUntilFinished);
+                remainTime = millisUntilFinished;
+            }
+            public void onFinish() {
+                //stop the game
+                isGameRunning = false;
+                Toast.makeText(getContext(), "Time is Over!", Toast.LENGTH_SHORT).show();
+                btnTimer.setVisibility(View.INVISIBLE);
+            }
+        };
+        cTimer.start();
+    }
+
+    /**
+     * Set the time to the text view
+     * @param millisUntilFinished the remain time
+     */
+    private void setTextForTimer(long millisUntilFinished) {
+        int seconds = (int) (millisUntilFinished / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        timerTextView.setText(String.format("%d:%02d", minutes, seconds));
+    }
+
+    /**
+     *  Cancel timer
+     */
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
+    }
 }

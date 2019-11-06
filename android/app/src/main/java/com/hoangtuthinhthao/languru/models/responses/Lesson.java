@@ -1,5 +1,7 @@
 package com.hoangtuthinhthao.languru.models.responses;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,6 +24,16 @@ public class Lesson implements Serializable {
     @SerializedName("topic")
     @Expose
     private String topic;
+
+    private Bitmap imageBitmap;
+
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
+    }
 
     public String getId() {
         return id;

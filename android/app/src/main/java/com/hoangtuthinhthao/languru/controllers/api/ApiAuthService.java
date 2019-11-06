@@ -1,6 +1,5 @@
 package com.hoangtuthinhthao.languru.controllers.api;
 
-import com.hoangtuthinhthao.languru.models.DefaultResponse;
 import com.hoangtuthinhthao.languru.models.responses.ResponseLogin;
 import com.hoangtuthinhthao.languru.models.responses.ResponseRegister;
 

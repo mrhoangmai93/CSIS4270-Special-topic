@@ -42,68 +42,14 @@ public class GameGridView extends GridView {
 
 
     private void init(final Context context) {
-        gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent event) {
-                return true;
-            }
+        gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
 
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                                   float velocityY) {
-                final int position = GameGridView.this.pointToPosition
-                        (Math.round(e1.getX()), Math.round(e1.getY()));
-
-//                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
-//                    if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH
-//                            || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
-//                        return false;
-//                    }
-//                    if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE) {
-//                        MainActivity.moveTiles(context, MainActivity.up, position);
-//                    } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
-//                        MainActivity.moveTiles(context, MainActivity.down, position);
-//                    }
-//                } else {
-//                    if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
-//                        return false;
-//                    }
-//                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-//                        MainActivity.moveTiles(context, MainActivity.left, position);
-//                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-//                        MainActivity.moveTiles(context, MainActivity.right, position);
-//                    }
-//                }
-
-                return super.onFling(e1, e2, velocityX, velocityY);
-            }
         });
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        int action = ev.getActionMasked();
-        gDetector.onTouchEvent(ev);
 
-        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-            mFlingConfirmed = false;
-        } else if (action == MotionEvent.ACTION_DOWN) {
-            mTouchX = ev.getX();
-            mTouchY = ev.getY();
-
-           // GameCardAnimation.flip();
-
-        } else {
-
-            if (mFlingConfirmed) {
-                return true;
-            }
-
-            float dX = (Math.abs(ev.getX() - mTouchX));
-            float dY = (Math.abs(ev.getY() - mTouchY));
-
-            Log.i("touch", "touch");
-        }
 
         return super.onInterceptTouchEvent(ev);
     }
