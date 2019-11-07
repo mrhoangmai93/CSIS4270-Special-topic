@@ -1,6 +1,7 @@
 package com.hoangtuthinhthao.languru.views.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,12 +18,15 @@ import android.widget.Toast;
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
 import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
+import com.github.lzyzsd.circleprogress.CircleProgress;
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.adapters.ItemClickListener;
 import com.hoangtuthinhthao.languru.controllers.adapters.RecyclerTouchListener;
 import com.hoangtuthinhthao.languru.controllers.adapters.SingleImageRVAdapter;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
+import com.hoangtuthinhthao.languru.models.responses.Topic;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
@@ -37,10 +41,10 @@ import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
  */
 public class LessonFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String topicName;
+    private Topic topic;
     private ArrayList<Lesson> lessonList;
 
     private OnFragmentInteractionListener mListener;
@@ -49,7 +53,7 @@ public class LessonFragment extends Fragment {
     private TextView txtTopicName, word, wordDescription;
 
     static CarouselLayoutManager layoutManager;
-
+    private CircleProgress circleProgress;
     public LessonFragment() {
         // Required empty public constructor
     }
@@ -58,15 +62,15 @@ public class LessonFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
+     * @param param Parameter 2.
      * @return A new instance of fragment LessonFragment.
      */
-    public static LessonFragment newInstance(String param1, ArrayList<Lesson> param2) {
+    public static LessonFragment newInstance(Topic param) {
         LessonFragment fragment = new LessonFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putSerializable(ARG_PARAM2, param2);
+
+        args.putSerializable(ARG_PARAM2, param);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,8 +79,10 @@ public class LessonFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            topicName = getArguments().getString(ARG_PARAM1);
-            lessonList = (ArrayList<Lesson>) getArguments().getSerializable(ARG_PARAM2);
+            topic = (Topic) getArguments().getSerializable(ARG_PARAM2);
+            lessonList = (ArrayList<Lesson>) topic.getList();
+            topicName = topic.getTopic();
+           // lessonList = (ArrayList<Lesson>) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -95,6 +101,14 @@ public class LessonFragment extends Fragment {
         txtTopicName = view.findViewById(R.id.topicName);
         word = view.findViewById(R.id.lessonName);
         wordDescription = view.findViewById(R.id.lessonDescription);
+        circleProgress = view.findViewById(R.id.topicProgress);
+        int myColor = Color.parseColor("#2DCE00");
+        circleProgress.setFinishedColor(myColor);
+
+        BigDecimal bigDecimal = new BigDecimal(topic.getProgress());
+        int intValue = bigDecimal.intValue();
+
+        circleProgress.setProgress(intValue);
 
         txtTopicName.setText(topicName);
 

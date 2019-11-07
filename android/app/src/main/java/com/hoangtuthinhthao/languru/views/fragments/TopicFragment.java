@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.adapters.ItemClickListener;
 import com.hoangtuthinhthao.languru.controllers.adapters.TopicRVAdapter;
+import com.hoangtuthinhthao.languru.models.responses.Progress;
 import com.hoangtuthinhthao.languru.views.activities.MainActivity;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class TopicFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
 
-    private ArrayList<String> lessonList;
+    private ArrayList<Progress> topicList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -41,13 +42,13 @@ public class TopicFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param lessonList Array list lessons
+     * @param topicList Array list lessons
      * @return A new instance of fragment TopicFragment.
      */
-    public static TopicFragment newInstance(ArrayList<String> lessonList) {
+    public static TopicFragment newInstance(ArrayList<Progress> topicList) {
         TopicFragment fragment = new TopicFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList(ARG_PARAM1, lessonList);
+        args.putSerializable(ARG_PARAM1, topicList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +57,7 @@ public class TopicFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            lessonList = getArguments().getStringArrayList(ARG_PARAM1);
+            topicList = (ArrayList<Progress>) getArguments().getSerializable(ARG_PARAM1);
         }
     }
 
@@ -72,7 +73,7 @@ public class TopicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView rv = view.findViewById(R.id.topicRecyclerView);
-        TopicRVAdapter adapter = new TopicRVAdapter(lessonList, new ItemClickListener() {
+        TopicRVAdapter adapter = new TopicRVAdapter(topicList, new ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 mListener.onRecyclerViewItemClick(view, position);

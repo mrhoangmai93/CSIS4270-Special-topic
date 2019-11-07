@@ -20,16 +20,22 @@ import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
+import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
-import com.hoangtuthinhthao.languru.controllers.loadServices.lesson.LoadLesson;
-import com.hoangtuthinhthao.languru.controllers.loadServices.lesson.LoadLessonCallback;
+import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopic;
+import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopicCallback;
+import com.hoangtuthinhthao.languru.controllers.loadServices.user.LoadUser;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
+import com.hoangtuthinhthao.languru.models.responses.Progress;
+import com.hoangtuthinhthao.languru.models.responses.Topic;
 import com.hoangtuthinhthao.languru.views.fragments.LessonFragment;
 import com.hoangtuthinhthao.languru.views.fragments.OnFragmentInteractionListener;
 import com.hoangtuthinhthao.languru.views.fragments.TopicFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.hoangtuthinhthao.languru.views.activities.LoginActivity.apiAuthInterface;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
     public static final String LOAD_TOPIC_DONE = "LOAD_TOPIC_DONE";
@@ -40,19 +46,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle t;
 
     // hard code topics
-    private ArrayList<String> topicList = new ArrayList<>(Arrays.asList("greeting", "music", "animals", "furniture", "school"));
-
+    private ArrayList<Progress> topicList;
     //Fragment
     private FragmentManager fm;
     private FragmentTransaction ft;
 
     // load lesson
-    private LoadLesson loadLesson;
-
+    private LoadTopic loadTopic;
+    private LoadUser loadUser;
     //broadcast Receiver
     BroadcastReceiver response;
     // Load Lesson callback
-    private LoadLessonCallback callback;
+    private LoadTopicCallback callback;
 
     //Session
     private SessionControl sessionControl;
@@ -80,11 +85,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Fragments
 
         fm = getSupportFragmentManager();
-        changeFragment(TopicFragment.newInstance(topicList));
+
 
         // initialize load lesson
-        loadLesson = new LoadLesson(this);
+        loadTopic = new LoadTopic(this);
 
+        LoadUser.getInstance(this).getProgress(new LoadUser.LoadUserData() {
+            @Override
+            public void onLoadProgressSucess(ArrayList<Progress> progressArrayList) {
+                topicList = progressArrayList;
+                changeFragment(TopicFragment.newInstance(progressArrayList));
+            }
+
+            @Override
+            public void loadFail(String msg) {
+
+            }
+        });
         //initialize broad receiver
         response = new BroadcastReceiver() {
             @Override
@@ -97,10 +114,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sessionControl = new SessionControl(this);
 
         // initialze callback for load lesson
-        callback = new LoadLessonCallback() {
+        callback = new LoadTopicCallback() {
             @Override
-            public void successLoadLesson(String topicName, ArrayList<Lesson> lessons) {
-                changeFragment(LessonFragment.newInstance(topicName, lessons));
+            public void successLoadLesson(String topicName, Topic topic) {
+
+                changeFragment(LessonFragment.newInstance( topic));
             }
 
             @Override
@@ -126,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.logout :
                 sessionControl.setJwtToken(null);
+
+                AuthHelpers.logoutUser(this, apiAuthInterface, sessionControl.getRefreshToken());
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.gameCenter :
@@ -178,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Log.i("positoin", String.valueOf(position));
-        loadLesson.byTopic(topicList.get(position), callback);
+        loadTopic.byTopic(topicList.get(position).getTopic(), callback);
     }
 
     @Override

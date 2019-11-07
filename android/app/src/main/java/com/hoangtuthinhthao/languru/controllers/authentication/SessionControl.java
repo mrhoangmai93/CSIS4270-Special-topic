@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 public class SessionControl {
     public static final String JWT_TOKEN = "JwtToken";
+    public static final String REFRESH_TOKEN = "REFRESH_TOKEN";
     Context context;
     private  SharedPreferences prefs;
 
@@ -22,7 +23,20 @@ public class SessionControl {
             prefs.edit().putString(JWT_TOKEN, token).apply();
         }
     }
-
+    public void setRefreshToken(String token) {
+        if (token == null || token.equals("")) {
+            prefs.edit().remove(REFRESH_TOKEN).apply();
+        } else {
+            prefs.edit().putString(REFRESH_TOKEN, token).apply();
+        }
+    }
+    public  String getRefreshToken() {
+        String token = prefs.getString(REFRESH_TOKEN, "");
+        if (token == null || token.isEmpty()) {
+            token = "";
+        }
+        return token;
+    }
     public  String getJwtToken() {
         String token = prefs.getString(JWT_TOKEN, "");
         if (token == null || token.isEmpty()) {

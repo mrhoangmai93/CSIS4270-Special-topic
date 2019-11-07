@@ -1,12 +1,11 @@
 package com.hoangtuthinhthao.languru.controllers.loadServices.game;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
 import com.hoangtuthinhthao.languru.controllers.api.ApiGameService;
-import com.hoangtuthinhthao.languru.controllers.api.ApiLessonService;
-import com.hoangtuthinhthao.languru.controllers.loadServices.lesson.LoadLessonCallback;
+import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopicCallback;
+import com.hoangtuthinhthao.languru.models.game.LoadGameCallback;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class LoadGame {
         apiInterface = ApiClient.getClient(this.context).create(ApiGameService.class);
     }
 
-    public void byNumberWord(final int numberWord, final LoadLessonCallback callback) {
+    public void byNumberWord(final int numberWord, final LoadGameCallback callback) {
         Call<ArrayList<Lesson>> call = apiInterface.getByNumberWord(numberWord);
         call.enqueue(new Callback<ArrayList<Lesson>>() {
             @Override
@@ -32,18 +31,18 @@ public class LoadGame {
                 if(response.isSuccessful()){
                     ArrayList<Lesson> lessonList = response.body(); // have your all data
 
-                    callback.successLoadLesson(String.valueOf(numberWord),lessonList);
+                    callback.successLoadGame(numberWord,lessonList);
 
                 } else {
 
-                    callback.failLoadLesson(response.errorBody().toString());
+                    callback.failLoadGame(response.errorBody().toString());
 
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Lesson>> call, Throwable t) {
-                callback.failLoadLesson(t.getMessage());
+                callback.failLoadGame(t.getMessage());
             }
 
         });

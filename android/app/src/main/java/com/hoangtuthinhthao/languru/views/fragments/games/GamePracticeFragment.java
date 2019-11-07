@@ -1,12 +1,15 @@
 package com.hoangtuthinhthao.languru.views.fragments.games;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.hoangtuthinhthao.languru.models.responses.Lesson;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -181,6 +185,7 @@ public class GamePracticeFragment extends Fragment {
             @Override
             public void onGameComplete() {
                 Toast.makeText(getContext(), "Level Complete", Toast.LENGTH_SHORT).show();
+                cancelTimer();
                 mListener.onGameComplete(numberOfWord);
             }
         };
@@ -195,7 +200,17 @@ public class GamePracticeFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Quit Game")
+                        .setMessage("Would you like to quit this game?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mListener.onBackButtonPressed();
+                            }
+                        })
+                        .setNegativeButton("NO",null)
+                        .show();
             }
         });
     }

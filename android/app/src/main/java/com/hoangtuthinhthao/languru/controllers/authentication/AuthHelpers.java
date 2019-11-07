@@ -13,6 +13,7 @@ import com.hoangtuthinhthao.languru.models.responses.ResponseRegister;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,16 +35,19 @@ public class AuthHelpers {
             @Override
             public void onResponse(Call<ResponseRegister> call, Response<ResponseRegister> response) {
                 if(response.isSuccessful()){
-                    response.body(); // have your all data
+                    //response.body(); // have your all data
                     List<Session> sessions = response.body().getSessions();
                     //Log.i("header",response.headers().toString());
                     String token = "";
-                    if(sessions != null)
+                    String refreshToken ="";
+                    if(sessions != null) {
                         token = sessions.get(sessions.size()-1).getAccessToken();
-
+                        refreshToken = sessions.get(sessions.size()-1).getRefreshToken();
+                    }
                     Intent intent = new Intent();
-                    intent.setAction(REGISTER_DONE);
+                    intent.setAction(LOGIN_DONE);
                     intent.putExtra("token",token);
+                    intent.putExtra("refreshToken",refreshToken);
                     context.sendBroadcast(intent);
 
 
@@ -72,11 +76,10 @@ public class AuthHelpers {
      * login user broadcast the token after finished
      * @param context
      * @param apiInterface
-     * @param session
      * @param email
      * @param password
      */
-    public static void loginUser(final Context context, ApiAuthService apiInterface, final SessionControl session, final String email, String password) {
+    public static void loginUser(final Context context, ApiAuthService apiInterface , final String email, String password) {
         // Set up progressbar before call
         Call<ResponseLogin> call = apiInterface.loginUser(email, password, "android");
 
@@ -87,12 +90,15 @@ public class AuthHelpers {
                     response.body(); // have your all data
                     List<Session> sessions = response.body().getSessions();
                     String token = "";
-                    if(sessions != null)
+                    String refreshToken ="";
+                    if(sessions != null) {
                         token = sessions.get(sessions.size()-1).getAccessToken();
-
+                        refreshToken = sessions.get(sessions.size()-1).getRefreshToken();
+                    }
                     Intent intent = new Intent();
                     intent.setAction(LOGIN_DONE);
                     intent.putExtra("token",token);
+                    intent.putExtra("refreshToken",refreshToken);
                     context.sendBroadcast(intent);
                 }
                 else   Toast.makeText(context, "Failed",Toast.LENGTH_SHORT).show();
@@ -101,6 +107,30 @@ public class AuthHelpers {
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
                 Log.e("Login Failed", t.getMessage());
+                Intent intent = new Intent();
+                intent.setAction(AUTH_FAILED);
+                intent.putExtra("message", t.getMessage());
+                context.sendBroadcast(intent);
+            }
+
+        });
+    }
+    public static void logoutUser(final Context context, ApiAuthService apiInterface, final String refreshToken) {
+        // Set up progressbar before call
+        Call<ResponseBody> call = apiInterface.logoutUser(refreshToken);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(context, "Log out",Toast.LENGTH_SHORT).show();
+                }
+                else   Toast.makeText(context, "Failed",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Logout Failed", t.getMessage());
                 Intent intent = new Intent();
                 intent.setAction(AUTH_FAILED);
                 intent.putExtra("message", t.getMessage());

@@ -30,12 +30,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String LOGIN_DONE = "LOGIN_DONE";
 
 
-    private ApiAuthService apiAuthInterface;
+    public static ApiAuthService apiAuthInterface;
     private EditText  email, password;
     private TextView createNewAccount;
     private Button login;
-    private User user;
-    private SharedPreferences prefs;
+
     private SessionControl session;
     Dialog dialog;
     ProgressDialog progressDialog;
@@ -132,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        AuthHelpers.loginUser(this, apiAuthInterface,session, txtEmail, txtPassword);
+        AuthHelpers.loginUser(this, apiAuthInterface, txtEmail, txtPassword);
     }
 
     /**
@@ -141,7 +140,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void registerDone(Intent intent) {
         String token = intent.getStringExtra("token");
+        String refresToken = intent.getStringExtra("refreshToken");
         session.setJwtToken(token);
+        session.setRefreshToken(refresToken);
 
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
