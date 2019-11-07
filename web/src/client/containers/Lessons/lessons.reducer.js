@@ -4,7 +4,7 @@ import * as ActionType from './lessons.action';
 const initialState = Immutable.fromJS({
     lessons: {},
     isLoading: false,
-    progress: ''
+    progress: {}
 });
 
 const reducer = (state = initialState, {type, payload}) => {
