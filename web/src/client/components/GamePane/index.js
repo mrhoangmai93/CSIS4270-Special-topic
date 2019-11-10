@@ -131,6 +131,7 @@ class GamePane extends React.Component {
                             name={opponent.get('name')}
                             currentLevel={opponent.get('currentLevel')}
                             matchCount={opponent.get('matchCount')}
+                            status={opponent.get('status')}
                         />
                     </div>
                 </div>

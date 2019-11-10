@@ -36,10 +36,27 @@ function subscribe(socket) {
                     emit(GAME_ACTION.opponentReady());
                     break;
                 case 'SERVER_START_GAME':
+                case 'SERVER_RESUME_GAME':
                     emit(GAME_ACTION.gameStart());
+                    break;
+                case 'SERVER_PAUSE_GAME':
+                    emit(GAME_ACTION.gamePause());
+                    break;
+                case 'SERVER_OPPONENT_INCREASE_MATCH_COUNT':
+                    emit(GAME_ACTION.opponentIncreaseMaxCount());
+                    break;
+                case 'SERVER_OPPONENT_LEVEL_UP':
+                    emit(GAME_ACTION.opponentLevelUp());
+                    break;
+                case 'SERVER_OPPONENT_FINISH_GAME':
+                    emit(GAME_ACTION.opponentFinishGame());
+                    break;
+                case 'SERVER_PLAYER_WIN':
+                    emit(GAME_ACTION.socketPlayerWin());
                     break;
                 case 'SERVER_GAME_ERROR':
                     emit(GAME_ACTION.gameError(data.payload));
+                    break;
                 default:
                     break;
 
@@ -90,7 +107,36 @@ function* playerReady(socket) {
         socket.emit('player.ready', data.payload);
     }
 }
-
+function* playerPause(socket) {
+    while (true) {
+        yield take(`${GAME_ACTION.GAME_PAUSE}`);
+        socket.emit('player.pause', undefined);
+    }
+}
+function* playerResume(socket) {
+    while (true) {
+        yield take(`${GAME_ACTION.SOCKET_RESUME_GAME}`);
+        socket.emit('player.resume', undefined);
+    }
+}
+function* increaseMatchCount(socket) {
+    while (true) {
+        yield take(`${GAME_ACTION.INCREASE_MATCH_COUNT_SUCCESS}`);
+        socket.emit('player.increaseMatchCount', undefined);
+    }
+}
+function* playerLevelUp(socket) {
+    while (true) {
+        yield take(`${GAME_ACTION.SET_GAME_LEVEL}`);
+        socket.emit('player.levelUp', undefined);
+    }
+}
+function* playerFinishGame(socket) {
+    while (true) {
+        yield take(`${GAME_ACTION.SOCKET_GAME_FINISHED}`);
+        socket.emit('player.finishGame', undefined);
+    }
+}
 // * * * * * * * * * * * * *  //
 // * MAIN SOCKET LISTENERS * //
 // * * * * * * * * * * * * *  //
@@ -100,6 +146,11 @@ function* socketWatch(socket) {
     yield fork(createGame, socket);
     yield fork(joinGame, socket);
     yield fork(playerReady, socket);
+    yield fork(playerPause, socket);
+    yield fork(playerResume, socket);
+    yield fork(increaseMatchCount, socket);
+    yield fork(playerLevelUp, socket);
+    yield fork(playerFinishGame, socket);
 }
 
 function* startup() {

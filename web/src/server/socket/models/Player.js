@@ -41,7 +41,19 @@ playerSchema.methods.toJson = function toJson() {
         name: this.name,
     };
 };
-
+playerSchema.methods.startGame = function startGame() {
+    this.set('finished', false);
+    return this;
+};
+playerSchema.methods.increaseMatchCount = function increaseMatchCount() {
+    this.set('matchCount', this.matchCount + 1);
+    return this;
+};
+playerSchema.methods.increaseLevel = function increaseLevel() {
+    this.set('currentLevel', this.currentLevel + 1);
+    this.set('matchCount', 0);
+    return this;
+};
 playerSchema.methods.setRoom = function setRoom(roomId) {
     this.set('room', roomId);
     return this;

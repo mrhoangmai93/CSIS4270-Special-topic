@@ -4,7 +4,12 @@ const {
     leaveGame,
     joinGame,
     checkEnoughPlayers,
-    userReadyToPlay
+    userReadyToPlay,
+    userPauseGame,
+    userResumeGame,
+    userIncreaseMatchCount,
+    userFinishGame,
+    userLevelUp
 } = require('./actions');
 
 const roomRepository = require('../../repositories/roomRepository');
@@ -24,9 +29,20 @@ module.exports = (io) => io.of('/room').on('connection', function(socket) {
         socket.opponent = opponentSocketId;
         await userReadyToPlay(io, socket);
     });
-    socket.on('set.status', async (payload) => {
-
-        // await userReadyToPlay(io, 'test', 'test');
+    socket.on('player.pause', async () => {
+        await userPauseGame(io, socket);
+    });
+    socket.on('player.resume', async () => {
+        await userResumeGame(io, socket);
+    });
+    socket.on('player.increaseMatchCount', async () => {
+        await userIncreaseMatchCount(io, socket);
+    });
+    socket.on('player.levelUp', async () => {
+        await userLevelUp(io, socket);
+    });
+    socket.on('player.finishGame', async () => {
+        await userFinishGame(io, socket);
     });
     // When a socket exits
     socket.on('disconnect', async() => {

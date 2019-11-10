@@ -16,9 +16,9 @@ module.exports = async (io, socket) => {
         room.startGame();
         await room.save();
 
-        room.getPlayers().forEach(async (pl) => {
+        await Promise.all(room.getPlayers().map(async (pl) => {
             await pl.startGame();
-        });
+        }));
         await notifyMe(socket, START_GAME, '');
         await notifyPlayer(socket, START_GAME, '', socket.opponent);
 

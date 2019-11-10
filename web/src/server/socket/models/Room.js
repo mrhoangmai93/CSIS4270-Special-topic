@@ -38,7 +38,10 @@ RoomSchema.methods.startGame = function startGame() {
     this.status = statuses.IN_PROCESS;
     return this;
 };
-
+RoomSchema.methods.pauseGame = function pauseGame() {
+    this.status = statuses.PAUSE;
+    return this;
+};
 RoomSchema.methods.endGame = function endGame() {
     this.status = statuses.FINISHED;
     return this;

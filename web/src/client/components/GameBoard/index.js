@@ -40,7 +40,7 @@ class GameBoard extends React.Component {
                 </div>;
             case GAME_STATE.OVER:
                 return <div>
-                    <h1 className="text-center text-orange-500 text-2xl">Sorry you run out of time!</h1>
+                    <h1 className="text-center text-orange-500 text-2xl">Sorry you loose! Please try next time</h1>
                     <Button type="primary" shape="round" icon="right-circle" size="large"
                             className="mx-auto block mt-5" onClick={this.props.handleBack}>Back to Menu</Button>
                 </div>;

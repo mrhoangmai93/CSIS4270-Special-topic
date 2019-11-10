@@ -16,6 +16,7 @@ export const GAME_PAUSE = `${PREFIX}GAME_PAUSE`;
 export const ROUND_FINISHED = `${PREFIX}ROUND_FINISHED`;
 export const DEDUCT_TIME = `${PREFIX}DEDUCT_TIME`;
 export const INCREASE_TIMER = `${PREFIX}INCREASE_TIMER`;
+export const STOP_TIMER = `${PREFIX}STOP_TIMER`;
 
 export const LOAD_GAME_DATA = `${PREFIX}LOAD_GAME_DATA`;
 export const LOAD_GAME_DATA_SUCCESS = `${PREFIX}LOAD_GAME_DATA_SUCCESS`;
@@ -32,6 +33,13 @@ export const SOCKET_JOIN_GAME_SUCCESS = `${PREFIX}SOCKET_JOIN_GAME_SUCCESS`;
 
 export const MULTI_PLAYER_READY = `${PREFIX}MULTI_PLAYER_READY`;
 export const OPPONENT_READY = `${PREFIX}OPPONENT_READY`;
+export const OPPONENT_INCREASE_MATCH_COUNT = `${PREFIX}OPPONENT_INCREASE_MATCH_COUNT`;
+export const OPPONENT_LEVEL_UP = `${PREFIX}OPPONENT_LEVEL_UP`;
+export const OPPONENT_FINISH_GAME = `${PREFIX}OPPONENT_FINISH_GAME`;
+export const SOCKET_RESUME_GAME = `${PREFIX}SOCKET_RESUME_GAME`;
+export const SOCKET_GAME_FINISHED = `${PREFIX}SOCKET_GAME_FINISHED`;
+export const SOCKET_PLAYER_WIN = `${PREFIX}SOCKET_PLAYER_WIN`;
+
 
 
 export const GAME_STATE = {
@@ -86,6 +94,11 @@ export function gameStart() {
 export function gamePause() {
     return {
         type: GAME_PAUSE,
+    };
+}
+export function stopTimer() {
+    return {
+        type: STOP_TIMER,
     };
 }
 export function roundFinished() {
@@ -222,5 +235,35 @@ export function multiPlayerReady(opponentSocketId) {
 export function opponentReady() {
     return {
         type: OPPONENT_READY,
+    }
+}
+export function opponentIncreaseMaxCount() {
+    return {
+        type: OPPONENT_INCREASE_MATCH_COUNT,
+    }
+}
+export function opponentLevelUp() {
+    return {
+        type: OPPONENT_LEVEL_UP,
+    }
+}
+export function opponentFinishGame() {
+    return {
+        type: OPPONENT_FINISH_GAME,
+    }
+}
+export function socketResumeGame() {
+    return {
+        type: SOCKET_RESUME_GAME,
+    }
+}
+export function socketGameFinished() {
+    return {
+        type: SOCKET_GAME_FINISHED,
+    }
+}
+export function socketPlayerWin() {
+    return {
+        type: SOCKET_PLAYER_WIN,
     }
 }

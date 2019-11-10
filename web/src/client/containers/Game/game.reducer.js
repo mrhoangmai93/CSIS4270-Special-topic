@@ -75,6 +75,16 @@ export default function (state = initialState, {type, payload}) {
             return state.set('gameState', ActionType.GAME_STATE.MULTI_PLAYER_READY);
         case ActionType.INCREASE_TIMER:
             return state.update('timer', val => val + 1);
+        case ActionType.OPPONENT_INCREASE_MATCH_COUNT:
+            return state.updateIn(['socketData', 'opponent', 'matchCount'], count => count + 1);
+        case ActionType.OPPONENT_LEVEL_UP:
+            return state.updateIn(['socketData', 'opponent', 'currentLevel'], level => level + 1).setIn(['socketData', 'opponent', 'matchCount'], 0);
+        case ActionType.SOCKET_GAME_FINISHED:
+            return state.setIn(['socketData', 'opponent', 'status'], 'Opponent LOOSE!');
+        case ActionType.OPPONENT_FINISH_GAME:
+            return state.setIn(['socketData', 'opponent', 'status'], 'Opponent WIN!');
+        case ActionType.SOCKET_PLAYER_WIN:
+            return state.setIn(['socketData', 'opponent', 'status'], 'Opponent LEFT!');
         case ActionType.GAME_ERROR:
             return state.merge({
                 isLoading: false,

@@ -57,7 +57,7 @@ function* timer() {
         const bgSyncTask = yield fork(tick);
 
         // wait for the user stop action
-        yield take(GAME_ACTION.GAME_PAUSE);
+        yield take(GAME_ACTION.STOP_TIMER);
         // user clicked stop. cancel the background task
         // this will throw a SagaCancellationException into task
         yield cancel(bgSyncTask);
@@ -68,9 +68,13 @@ function* handleGameStart() {
     try {
         clearInterval(localStorage.iv);
         localStorage.iv = undefined;
-        yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.IN_PROGRESS));
 
         const isMultiPlayer = yield select(state => state.game.get('isMultiPlayer'));
+        const gameState = yield select(state => state.game.get('gameState'));
+        if(isMultiPlayer && gameState === GAME_ACTION.GAME_STATE.PAUSE) {
+            yield put(GAME_ACTION.socketResumeGame());
+        }
+        yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.IN_PROGRESS));
 
         if(!isMultiPlayer) {
             const getCurrentLevel = yield select(state => state.game.get('level'));
@@ -106,6 +110,7 @@ function* handleGamePause() {
     try {
         clearInterval(localStorage.iv);
         localStorage.iv = undefined;
+        yield put(GAME_ACTION.stopTimer());
         yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.PAUSE));
 
     } catch (e) {
@@ -148,6 +153,7 @@ function* handleSetGameLevel({payload}) {
 
 function* handleWordMatch({payload}) {
     try {
+
         yield put(GAME_ACTION.increaseMatchCountSuccess(payload));
         const totalMatches = yield select(state => state.game.getIn(['gameData', payload, 'totalMatches']));
         const amount = yield select(state => state.game.getIn(['gameData', payload, 'amount']));
@@ -156,7 +162,10 @@ function* handleWordMatch({payload}) {
             else {
                 clearInterval(localStorage.iv);
                 localStorage.iv = undefined;
+                yield put(GAME_ACTION.stopTimer());
                 yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.FINISHED));
+                yield put(GAME_ACTION.socketGameFinished());
+
             }
         }
     } catch (e) {
@@ -203,7 +212,22 @@ function* handleLoadGameData() {
         yield put(GAME_ACTION.gameError((e.response) ? e.response.data.message : 'Connection error'));
     }
 }
+function* handleOpponentFinishGame() {
+    try {
+        yield put(GAME_ACTION.stopTimer());
+        yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.OVER));
+    }catch (e) {
 
+    }
+}
+function* handlePlayerWin() {
+    try {
+        yield put(GAME_ACTION.stopTimer());
+        yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.FINISHED));
+    }catch (e) {
+
+    }
+}
 export default function* rootSaga() {
     yield all([
         takeEvery(GAME_ACTION.GO_SINGLE_PLAYER, handleSinglePlayer),
@@ -215,5 +239,8 @@ export default function* rootSaga() {
         takeEvery(GAME_ACTION.ROUND_FINISHED, handleRoundFinished),
         takeEvery(GAME_ACTION.SET_GAME_LEVEL, handleSetGameLevel),
         takeEvery(GAME_ACTION.INCREASE_MATCH_COUNT, handleWordMatch),
+        takeEvery(GAME_ACTION.OPPONENT_FINISH_GAME, handleOpponentFinishGame),
+        takeEvery(GAME_ACTION.SOCKET_PLAYER_WIN, handlePlayerWin),
+
     ]);
 };
