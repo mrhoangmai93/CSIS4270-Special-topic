@@ -37,4 +37,17 @@
     line-height: 250px;
     width: 250px;
     height: 300px;
+    position: relative;
+  }
+
+  .word-speaker{
+    position: absolute;
+    top: 0xp;
+    right: 0px;
+    margin: 15px;
+  }
+
+  .word{
+    width: 250px;
+    height: 275px;
   }
