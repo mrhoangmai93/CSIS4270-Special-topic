@@ -6,4 +6,5 @@ package com.hoangtuthinhthao.languru.views.fragments;
 public interface OnFragmentInteractionListener {
     void onRecyclerViewItemClick(View view, int position);
     void onBackButtonPressed();
+    void onSpeakerClick(String word);
 }

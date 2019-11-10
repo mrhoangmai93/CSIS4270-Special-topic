@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ import com.hoangtuthinhthao.languru.views.fragments.TopicFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import static com.hoangtuthinhthao.languru.views.activities.LoginActivity.apiAuthInterface;
 
@@ -61,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Session
     private SessionControl sessionControl;
+
+    //textspeaker variable
+    private TextToSpeech mTTS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,15 +74,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*
          * BEGIN NAVIGATION DRAWER
          */
-        drawerLayout =  findViewById(R.id.drawer_layout);
-        t = new ActionBarDrawerToggle(this, drawerLayout,R.string.Open, R.string.Close);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        t = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
 
         drawerLayout.addDrawerListener(t);
         t.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         /*
          * END NAVIGATION DRAWER
@@ -118,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void successLoadLesson(String topicName, Topic topic) {
 
-                changeFragment(LessonFragment.newInstance( topic));
+                changeFragment(LessonFragment.newInstance(topic));
             }
 
             @Override
@@ -126,6 +132,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
+
+        // call text to speech function
+
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = mTTS.setLanguage(Locale.US);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "Language not supported");
+                    }
+                } else {
+                    Log.e("TTS", "Initialization failed");
+                }
+            }
+        });
     }
 
     @Override
@@ -133,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         AuthChecker authChecker = new AuthChecker(sessionControl);
 
-        if(!authChecker.isAuthenticated()) {
+        if (!authChecker.isAuthenticated()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
     }
@@ -142,26 +166,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.logout :
+            case R.id.logout:
                 sessionControl.setJwtToken(null);
 
                 AuthHelpers.logoutUser(this, apiAuthInterface, sessionControl.getRefreshToken());
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
-            case R.id.gameCenter :
+            case R.id.gameCenter:
                 startActivity(new Intent(MainActivity.this, GameActivity.class));
                 break;
-            case R.id.AI :
+            case R.id.AI:
                 startActivity(new Intent(MainActivity.this, AIActivity.class));
                 break;
         }
 
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(t.onOptionsItemSelected(item))
+        if (t.onOptionsItemSelected(item))
             return true;
 
         return super.onOptionsItemSelected(item);
@@ -173,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         unregisterReceiver(response);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -182,10 +208,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         filter.addAction(LOAD_TOPIC_FAILED);
 
         // register broadcast
-        registerReceiver(response,filter);
+        registerReceiver(response, filter);
     }
+
     /**
      * Change fragment function
+     *
      * @param fg Fragment to change
      */
     private void changeFragment(Fragment fg) {
@@ -203,8 +231,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackButtonPressed() {
-        Fragment fragment =  fm.findFragmentById(R.id.main_activity_container);
-        if(fragment instanceof LessonFragment) {
+        Fragment fragment = fm.findFragmentById(R.id.main_activity_container);
+        if (fragment instanceof LessonFragment) {
 
             changeFragment(TopicFragment.newInstance(topicList));
         } else {
@@ -212,18 +240,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onSpeakerClick(String word) {
+        speak(word);
+    }
+
     /**
      * This function handler the responses received from broadcast
+     *
      * @param intent intent received
      */
     private void handleResponse(Intent intent) {
-        switch (intent.getAction()){
-            case LOAD_TOPIC_DONE :
+        switch (intent.getAction()) {
+            case LOAD_TOPIC_DONE:
                 Toast.makeText(this, "Loaded", Toast.LENGTH_SHORT).show();
                 break;
-            case LOAD_TOPIC_FAILED :
+            case LOAD_TOPIC_FAILED:
                 Toast.makeText(this, "Failed load", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void speak(String message) {
+
+        mTTS.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mTTS != null) {
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+
+        super.onDestroy();
     }
 }

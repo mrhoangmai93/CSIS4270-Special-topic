@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class LessonFragment extends Fragment {
     private Topic topic;
     private ArrayList<Lesson> lessonList;
 
+    private ImageView speaker;
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView rv;
@@ -104,6 +106,14 @@ public class LessonFragment extends Fragment {
         circleProgress = view.findViewById(R.id.topicProgress);
         int myColor = Color.parseColor("#2DCE00");
         circleProgress.setFinishedColor(myColor);
+        speaker = view.findViewById(R.id.speakerImage) ;
+
+        speaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onSpeakerClick(word.getText().toString());
+            }
+        });
 
         BigDecimal bigDecimal = new BigDecimal(topic.getProgress());
         int intValue = bigDecimal.intValue();

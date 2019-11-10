@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lessonNameFields"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="Word:"
+                    android:layout_alignParentLeft="true"
                     android:textSize="20sp"
                     android:layout_marginLeft="30dp"
                     />
@@ -90,9 +91,19 @@
                     android:text="Word Name"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp"
+                    android:layout_centerInParent="true"
                     android:layout_marginLeft="30dp"
                     />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/speakerImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="30dp"
+                    android:src="@drawable/ic_speaker" />
+
+            </RelativeLayout>
             <LinearLayout
                 android:id="@+id/lessonDescriptionField"
                 android:layout_width="match_parent"
