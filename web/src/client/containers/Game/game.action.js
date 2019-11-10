@@ -1,6 +1,3 @@
-import {LOGIN_REQUEST} from "../Login/login.action";
-
-
 const PREFIX = "GAME_";
 
 export const GO_SINGLE_PLAYER = `${PREFIX}GO_SINGLE_PLAYER`;
@@ -18,23 +15,33 @@ export const GAME_START = `${PREFIX}GAME_START`;
 export const GAME_PAUSE = `${PREFIX}GAME_PAUSE`;
 export const ROUND_FINISHED = `${PREFIX}ROUND_FINISHED`;
 export const DEDUCT_TIME = `${PREFIX}DEDUCT_TIME`;
+export const INCREASE_TIMER = `${PREFIX}INCREASE_TIMER`;
+
 export const LOAD_GAME_DATA = `${PREFIX}LOAD_GAME_DATA`;
 export const LOAD_GAME_DATA_SUCCESS = `${PREFIX}LOAD_GAME_DATA_SUCCESS`;
 export const EXIT = `${PREFIX}EXIT`;
 export const GAME_ERROR = `${PREFIX}GAME_ERROR`;
-//======================= Socket Events CONSTANTS ========================//
+//======================= Multiplayers Events CONSTANTS ========================//
 
-export const SOCKET_START_GAME = `${PREFIX}SOCKET_START_GAME`;
-export const SOCKET_EXIT_GAME = `${PREFIX}SOCKET_EXIT_GAME`;
+export const SOCKET_CREATE_GAME = `${PREFIX}SOCKET_CREATE_GAME`;
+export const SOCKET_CREATE_GAME_SUCCESS = `${PREFIX}SOCKET_CREATE_GAME_SUCCESS`;
+export const SOCKET_ENOUGH_PLAYERS = `${PREFIX}SOCKET_ENOUGH_PLAYERS`;
+
+export const SOCKET_JOIN_GAME = `${PREFIX}SOCKET_JOIN_GAME`;
+export const SOCKET_JOIN_GAME_SUCCESS = `${PREFIX}SOCKET_JOIN_GAME_SUCCESS`;
+
+export const MULTI_PLAYER_READY = `${PREFIX}MULTI_PLAYER_READY`;
+export const OPPONENT_READY = `${PREFIX}OPPONENT_READY`;
 
 
 export const GAME_STATE = {
     PENDING: 'PENDING',
     WAITING: 'WAITING',
+    WAITING_FOR_READY: 'WAITING_FOR_READY',
+    MULTI_PLAYER_READY: 'MULTI_PLAYER_READY',
     READY: 'READY',
     IN_PROGRESS: 'IN_PROGRESS',
     MULTI_BOARD: 'MULTI_BOARD',
-    INVITE: 'INVITE',
     PAUSE: 'PAUSE',
     FINISHED: 'FINISHED',
     OVER: 'OVER',
@@ -65,6 +72,11 @@ export function deductTime(level, sec) {
             sec
         },
     };
+}
+export function increaseTimer() {
+    return {
+        type: INCREASE_TIMER
+    }
 }
 export function gameStart() {
     return {
@@ -164,9 +176,51 @@ export function gameError(error) {
         payload: error
     }
 }
-//======================= Socket Functions ========================//
-export function socketExitGame() {
+//======================= MultiPlayers Functions ========================//
+export function socketCreateGame(code, name) {
     return {
-        type: SOCKET_EXIT_GAME,
+        type: SOCKET_CREATE_GAME,
+        payload: {
+            code,
+            name,
+        },
+    }
+}
+export function socketCreateGameSuccess(roomId) {
+    return {
+        type: SOCKET_CREATE_GAME_SUCCESS,
+        payload: roomId,
+    }
+}
+export function socketJoinGame(code, name) {
+    return {
+        type: SOCKET_JOIN_GAME,
+        payload: {
+            code,
+            name,
+        },
+    }
+}
+export function socketEnoughPlayers(payload) {
+    return {
+        type: SOCKET_ENOUGH_PLAYERS,
+        payload,
+    }
+}
+export function socketJoinGameSuccess(roomId) {
+    return {
+        type: SOCKET_JOIN_GAME_SUCCESS,
+        payload: roomId,
+    }
+}
+export function multiPlayerReady(opponentSocketId) {
+    return {
+        type: MULTI_PLAYER_READY,
+        payload: opponentSocketId,
+    }
+}
+export function opponentReady() {
+    return {
+        type: OPPONENT_READY,
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
-import GamePane, {GAMEPANECALLBACK_ENUMS} from '../../components/GamePane';
+import GamePane, {GAMEPANE_CALLBACK_ENUMS} from '../../components/GamePane';
 import {
     exit,
     goMultiPlayers,
@@ -12,7 +12,9 @@ import {
     setCellFlip,
     increaseMatchCount,
     clearCellPicks,
-    socketExitGame
+    socketCreateGame,
+    socketJoinGame,
+    multiPlayerReady
 } from './game.action';
 import GameCell, {GAMECELL_CALLBACK_ENUMS} from "../../components/GameCell";
 import {Modal} from "antd";
@@ -27,23 +29,32 @@ class Game extends React.Component {
     callbackHandler = (type, data) => {
         const {exit} = this.props;
         switch (type) {
-            case GAMEPANECALLBACK_ENUMS.SINGLE_PLAYER:
+            case GAMEPANE_CALLBACK_ENUMS.SINGLE_PLAYER:
                 this.props.goSinglePlayer();
                 break;
-            case GAMEPANECALLBACK_ENUMS.MULTI_PLAYERS:
+            case GAMEPANE_CALLBACK_ENUMS.MULTI_PLAYERS:
                 this.props.goMultiPlayers();
                 break;
-            case GAMEPANECALLBACK_ENUMS.START:
+            case GAMEPANE_CALLBACK_ENUMS.CREATE_MULTI_PLAYERS:
+                this.props.socketCreateGame(data.code, this.props.fullName);
+                break;
+            case GAMEPANE_CALLBACK_ENUMS.JOIN_MULTI_PLAYERS:
+                this.props.socketJoinGame(data.code, this.props.fullName);
+                break;
+            case GAMEPANE_CALLBACK_ENUMS.MULTI_PLAYER_READY:
+                this.props.multiPlayerReady(this.props.gameState.getIn(['socketData','opponent','socketId']));
+                break;
+            case GAMEPANE_CALLBACK_ENUMS.START:
                 this.props.gameStart();
                 break;
-            case GAMEPANECALLBACK_ENUMS.PAUSE:
+            case GAMEPANE_CALLBACK_ENUMS.PAUSE:
                 this.props.gamePause();
                 break;
-            case GAMEPANECALLBACK_ENUMS.BACK:
+            case GAMEPANE_CALLBACK_ENUMS.BACK:
                 this.clearCellPicks();
                 exit();
                 break;
-            case GAMEPANECALLBACK_ENUMS.EXIT:
+            case GAMEPANE_CALLBACK_ENUMS.EXIT:
                 const context = this;
                 confirm({
                     title: 'Do you Want exit this game?',
@@ -130,13 +141,17 @@ class Game extends React.Component {
                          isMultiPlayer={gameState.get('isMultiPlayer')}
                          isLoading={gameState.get('isLoading')}
                          renderBoardCells={this.renderBoardCells}
+                         roomNumber={gameState.getIn(['socketData', 'roomId'])}
+                         opponent={gameState.getIn(['socketData','opponent'])}
+                         timer={this.props.gameState.get('timer')}
                          timeLeft={this.props.gameState.getIn(['gameData', this.props.gameState.get('level'), 'timeLeft'])}
         />;
     }
 }
 
 const mapStateToProps = state => ({
-    gameState: state.game
+    gameState: state.game,
+    fullName: `${state.authentication.login.getIn(['userInfo', 'firstName'])} ${state.authentication.login.getIn(['userInfo', 'lastName'])}`
 });
 
 const mapDispatchToProps = {
@@ -149,7 +164,9 @@ const mapDispatchToProps = {
     setCellFlip,
     increaseMatchCount,
     clearCellPicks,
-    socketExitGame
+    socketCreateGame,
+    socketJoinGame,
+    multiPlayerReady
 };
 
 export default withRouter(

@@ -1,5 +1,5 @@
 import {
-    all, put, call, takeLatest, takeEvery, take, select
+    all, put, call, takeLatest, takeEvery, take, select, fork, cancel
 } from 'redux-saga/effects';
 import {eventChannel, END} from 'redux-saga';
 import {sumBy} from 'lodash';
@@ -8,6 +8,7 @@ import {getRandomWords} from '../../libs/lesson.lib';
 import {GAME_LEVEL} from '../../config/constants';
 
 localStorage.iv = undefined;
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function* handleSinglePlayer() {
     try {
@@ -44,23 +45,48 @@ function countdown(current) {
         }
     )
 }
+function* tick() {
+    while(true) {
+        yield call(delay, 1000);
+        yield put(GAME_ACTION.increaseTimer());
+    }
+}
+function* timer() {
+    try{
+        // starts the task in the background
+        const bgSyncTask = yield fork(tick);
 
+        // wait for the user stop action
+        yield take(GAME_ACTION.GAME_PAUSE);
+        // user clicked stop. cancel the background task
+        // this will throw a SagaCancellationException into task
+        yield cancel(bgSyncTask);
+    } catch (e) {
+    }
+}
 function* handleGameStart() {
     try {
         clearInterval(localStorage.iv);
         localStorage.iv = undefined;
-        const getCurrentLevel = yield select(state => state.game.get('level'));
-        const timeLimit = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'timeLeft']));
         yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.IN_PROGRESS));
-        const chan = yield call(countdown, timeLimit);
-        try {
-            while (true) {
-                yield take(chan);
-                yield put(GAME_ACTION.deductTime(getCurrentLevel, 1));
-            }
-        } finally {
+
+        const isMultiPlayer = yield select(state => state.game.get('isMultiPlayer'));
+
+        if(!isMultiPlayer) {
+            const getCurrentLevel = yield select(state => state.game.get('level'));
             const timeLimit = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'timeLeft']));
-            if (timeLimit === 0) yield put(GAME_ACTION.roundFinished());
+            const chan = yield call(countdown, timeLimit);
+            try {
+                while (true) {
+                    yield take(chan);
+                    yield put(GAME_ACTION.deductTime(getCurrentLevel, 1));
+                }
+            } finally {
+                const timeLimit = yield select(state => state.game.getIn(['gameData', getCurrentLevel, 'timeLeft']));
+                if (timeLimit === 0) yield put(GAME_ACTION.roundFinished());
+            }
+        } else {
+            yield timer();
         }
     } catch (e) {
         yield put(GAME_ACTION.gameError((e)));
@@ -170,7 +196,8 @@ function* handleLoadGameData() {
             };
         });
         yield put(GAME_ACTION.loadGameDataSuccess(levels));
-        yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.READY));
+        const isMultiPlayer = yield select(state => state.game.get('isMultiPlayer'));
+        if(!isMultiPlayer) yield put(GAME_ACTION.setGameState(GAME_ACTION.GAME_STATE.READY));
 
     } catch (e) {
         yield put(GAME_ACTION.gameError((e.response) ? e.response.data.message : 'Connection error'));
@@ -188,6 +215,5 @@ export default function* rootSaga() {
         takeEvery(GAME_ACTION.ROUND_FINISHED, handleRoundFinished),
         takeEvery(GAME_ACTION.SET_GAME_LEVEL, handleSetGameLevel),
         takeEvery(GAME_ACTION.INCREASE_MATCH_COUNT, handleWordMatch),
-
     ]);
 };

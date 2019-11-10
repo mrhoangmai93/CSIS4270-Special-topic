@@ -7,9 +7,14 @@ const initialState = Immutable.fromJS({
     error: '',
     level: 0,
     timeLimit: 0,
+    timer: 0,
     isLoading: false,
     isMultiPlayer: false,
     needClearCellPicks: false,
+    socketData: {
+        roomId: '',
+        opponent: {},
+    }
 });
 
 export default function (state = initialState, {type, payload}) {
@@ -41,6 +46,35 @@ export default function (state = initialState, {type, payload}) {
             return state.setIn(['gameData', payload.level, 'data', payload.cid, 'isFlipped'], payload.data);
         case ActionType.CLEAR_CELL_PICKS:
             return state.set('needClearCellPicks', payload);
+        case ActionType.SOCKET_CREATE_GAME:
+        case ActionType.SOCKET_JOIN_GAME:
+            return state.set('isLoading', true);
+        case ActionType.SOCKET_CREATE_GAME_SUCCESS:
+        case ActionType.SOCKET_JOIN_GAME_SUCCESS:
+            return state.setIn(['socketData', 'roomId'], payload).merge({
+                gameState: ActionType.GAME_STATE.WAITING,
+                isLoading: false
+            });
+        case ActionType.SOCKET_ENOUGH_PLAYERS:
+            return state.mergeDeep({
+                gameState: ActionType.GAME_STATE.WAITING_FOR_READY,
+                socketData: {
+                    opponent: {
+                        currentLevel: payload.currentLevel,
+                        finished: payload.finished,
+                        matchCount: payload.matchCount,
+                        name: payload.name,
+                        readyToPlay: payload.readyToPlay,
+                        socketId: payload.socketId,
+                    }
+                }
+            });
+        case ActionType.OPPONENT_READY:
+            return state.setIn(['socketData', 'opponent', 'readyToPlay'], true);
+        case ActionType.MULTI_PLAYER_READY:
+            return state.set('gameState', ActionType.GAME_STATE.MULTI_PLAYER_READY);
+        case ActionType.INCREASE_TIMER:
+            return state.update('timer', val => val + 1);
         case ActionType.GAME_ERROR:
             return state.merge({
                 isLoading: false,

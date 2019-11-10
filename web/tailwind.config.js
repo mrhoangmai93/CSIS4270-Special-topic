@@ -3,8 +3,9 @@ module.exports = {
     container: {
       center: true,
     },
-    extend: {}
+    extend: {
+    }
   },
   variants: {},
   plugins: []
-}
+};

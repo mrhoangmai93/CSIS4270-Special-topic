@@ -10,15 +10,25 @@ const playerSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    currentLevel: Number,
-    matchCount: Number,
+    currentLevel: {
+        type: Number,
+        default: 0,
+    },
+    matchCount: {
+        type: Number,
+        default: 0,
+    },
     socketId: String,
     name: {
         type: String,
         default: 'Guest'
     },
 });
-
+playerSchema
+    .virtual('roomId')
+    .get(function get() {
+        return this.room;
+    });
 playerSchema.methods.toJson = function toJson() {
     return {
         id: this.id,
@@ -47,7 +57,7 @@ playerSchema.methods.finish = function finish() {
     return this;
 };
 
-const Player = mongoose.model('Player', playerSchema);
+const Player = mongoose.model('RoomPlayer', playerSchema);
 module.exports = Player;
 
 
