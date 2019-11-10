@@ -1,7 +1,7 @@
 import React from "react";
 import {GAME_STATE} from "../../containers/Game/game.action";
 import {Button, Modal, Skeleton} from 'antd';
-import WrappedLoginForm from "../Login";
+import {GAME_LEVEL} from "../../config/constants";
 import GameBoard from "../GameBoard";
 import CreateNewGame from '../../components/CreateNewGame';
 import JoinAGame from '../../components/JoinAGame';
@@ -120,6 +120,9 @@ class GamePane extends React.Component {
                 return <></>;
         }
     };
+    convertMatchCountToPercent = (matchCount, currentLevel) => {
+        return (matchCount / GAME_LEVEL[currentLevel].amount * 100).toFixed(2);
+    };
     renderMultiPlayer = () => {
         const {isMultiPlayer, opponent} = this.props;
         if (!isMultiPlayer) return <></>;
@@ -130,7 +133,7 @@ class GamePane extends React.Component {
                         <OpponentCard
                             name={opponent.get('name')}
                             currentLevel={opponent.get('currentLevel')}
-                            matchCount={opponent.get('matchCount')}
+                            matchCount={this.convertMatchCountToPercent(opponent.get('matchCount'), opponent.get('currentLevel'))}
                             status={opponent.get('status')}
                         />
                     </div>
