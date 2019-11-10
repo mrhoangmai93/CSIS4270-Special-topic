@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Lessons from './pages/Lessons';
 import Register from './pages/Register';
 import Game from './pages/Game';
+import Translation from './pages/Translation';
 import FancyRoute from './components/FancyRoute';
 import configureStore, {
   history
@@ -43,6 +44,12 @@ const routes = [
     path: '/dashboard/game',
     exact: true,
     component: Game,
+  },
+  {
+    title: 'Translation',
+    path: '/dashboard/translation',
+    exact: true,
+    component: Translation,
   },
 ];
 

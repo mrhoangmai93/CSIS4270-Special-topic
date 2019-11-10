@@ -76,7 +76,7 @@ class LessonCard extends Component {
       this.startRotate = Math.round(this.state.rotate / this.angle) * this.angle;
     }
     onTouchMove = (e) => {
-      if (e.touches && e.touches.length > 1 || this.length <= 1 || !this.startX) {
+      if (e.touches && e.touches.length > 1 || this.length <= 1 || !this.startX || e.touches && !e.touches[0]) {
         return;
       }
       const x = e.pageX || e.touches[0].pageX;
