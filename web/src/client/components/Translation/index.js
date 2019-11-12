@@ -24,8 +24,10 @@ class Translation extends Component {
     if(e.keyCode===13){
       if(apiKey){
         googleTranslate.translate(e.target.value, 'en', function(err, translation) {
-          translating(translation);
-          detectLanguage(translation.detectedSourceLanguage)
+          if(translation){
+            translating(translation);
+            detectLanguage(translation.detectedSourceLanguage)
+          }
         });
       }
     }

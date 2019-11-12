@@ -2,7 +2,7 @@ import { put, takeLatest, all, call } from 'redux-saga/effects';
 import * as TRANSLATION_ACTION from "./translation.action";
 
 async function callTranslation(payload){
-    const googleTranslate = require('google-translate')("AIzaSyBAgxCdYfGnP1XDN4Zd1olrx34OGoVUY6o");
+    const googleTranslate = require('google-translate')(process.env.REACT_APP_GOOGLE_API_KEY);
     return await googleTranslate.translate(payload, 'en', function(err, translation) {
         return translation;
     });
