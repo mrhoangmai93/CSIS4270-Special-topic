@@ -97,7 +97,7 @@ class LessonCard extends Component {
       });
     }
     onTouchEnd = (e) => {
-      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX) {
+      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX || e.touches && !e.touches[0]) {
         return;
       }
       const x = e.pageX || e.changedTouches[0].pageX;

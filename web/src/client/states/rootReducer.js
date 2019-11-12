@@ -6,6 +6,7 @@ import register from '../containers/Register/register.reducer';
 import game from '../containers/Game/game.reducer';
 import header from '../containers/Header/header.reducer';
 import lessons from '../containers/Lessons/lessons.reducer';
+import translation from '../containers/Translation/translation.reducer';
 
 const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
@@ -15,7 +16,8 @@ const createRootReducer = (history) => combineReducers({
     }),
     game,
     header, 
-    lessons
+    lessons, 
+    translation
 });
 
 export default createRootReducer;
