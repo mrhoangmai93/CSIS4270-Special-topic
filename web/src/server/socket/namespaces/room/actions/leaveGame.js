@@ -11,7 +11,7 @@ module.exports = async (io, socket, room) => {
     if(players.length === 1) {
         await roomRepository.removeRoomByCode(newRoom.code);
     } else {
-        if(newRoom.status !== Room.statuses.WAIT_PLAYERS) {
+        if(newRoom.status !== Room.statuses.WAIT_PLAYERS && newRoom.status !== Room.statuses.FINISHED) {
             const remainPlayers = newRoom.players.filter(p => p.socketId !== socket.id);
             await Promise.all(remainPlayers.map(async (player) => {
                 await notifyPlayer(socket, PLAYER_WIN, '' , player.socketId);

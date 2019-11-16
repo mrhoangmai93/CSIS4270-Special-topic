@@ -5,22 +5,37 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import ReactCardFlip from 'react-card-flip';
 import {setProgress} from '../../containers/Lessons/lessons.action';
+import { Icon } from 'antd';
 
 class CarouselCards extends Component {
   constructor(props) {
     super(props);
       this.state = {
-      isFlipped: false
+      isFlipped: false,
+      isSpeakerClicked: false,
     };
   }
   
   handleCardClicked(word, topic) {
-    this.setState({isFlipped: !this.state.isFlipped});
+    this.setState({
+      isFlipped: !this.state.isFlipped,
+      isSpeakerClicked: false
+    });
     if(word, topic){
       this.props.setProgress(word, topic);
     }
   }
   
+  handleSpeakerClicked(word){
+    this.setState({isSpeakerClicked: true});
+    const parameters = {
+      onend: () => {
+        this.setState({isSpeakerClicked: false});
+      }
+    }
+    window.responsiveVoice.speak(word, "UK English Female", parameters)
+  }
+
   render(){
     let lessons;
     if(this.props.lessons && this.props.lessons.list){
@@ -35,8 +50,9 @@ class CarouselCards extends Component {
             </div>
             <div key="back" 
               className="flip-card-back" 
-              onClick={()=> {this.handleCardClicked()}}>
-              {lesson.word}
+            >
+              <div><Icon type="sound" className="word-speaker" onClick={()=> {this.handleSpeakerClicked(lesson.word)}} theme={this.state.isSpeakerClicked? "filled" : "outlined"}/></div>
+              <div onClick={()=> {this.handleCardClicked()}} className="word">{lesson.word}</div>
             </div>
           </ReactCardFlip>
         </div>

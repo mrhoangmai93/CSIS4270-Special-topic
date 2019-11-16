@@ -8,7 +8,7 @@ export default (props) => (
         <div class="flex mb-4">
             <div class="w-full lg:w-1/3"><h3 className="text-xl text-center">Name: <span className="text-orange-500">{props.name}</span></h3></div>
             <div class="w-full lg:w-1/3"><h3 className="text-xl text-center">Current Level: <span className="text-orange-500">{props.currentLevel + 1}</span></h3></div>
-            <div class="w-full lg:w-1/3"><h3 className="text-xl text-center">Total Matches: <span className="text-orange-500">{props.matchCount}</span></h3></div>
+            <div class="w-full lg:w-1/3"><h3 className="text-xl text-center">Progress: <span className="text-orange-500">{props.matchCount}%</span></h3></div>
         </div>
     </>
 );
