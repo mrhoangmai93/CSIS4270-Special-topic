@@ -225,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        Log.i("positoin", String.valueOf(position));
         loadTopic.byTopic(topicList.get(position).getTopic(), callback);
     }
 

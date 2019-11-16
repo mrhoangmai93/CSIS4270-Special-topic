@@ -21,8 +21,67 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent "
             android:src="@drawable/ic_arrow_back"/>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/opponentContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/lbOpponent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opponent Info:"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="100dp"
+                />
+            <TextView
+                android:id="@+id/txtOpponentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                app:layout_constraintTop_toBottomOf="@+id/lbOpponent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                />
+            <TextView
+                android:id="@+id/txtOppLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level: "
+                app:layout_constraintTop_toBottomOf="@+id/txtOpponentName"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                />
+            <TextView
+                android:id="@+id/lbOppStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                app:layout_constraintTop_toBottomOf="@+id/txtOppLevel"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                />
+            <TextView
+                android:id="@+id/txtOppStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:layout_constraintTop_toBottomOf="@+id/lbOppStatus"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                />
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
-    <android.support.constraint.ConstraintLayout
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:background="@drawable/bg_round_btn_white"
@@ -35,8 +94,16 @@
             android:id="@+id/gameBoardGrid"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-    </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/gameStatus"
+            android:text="Status"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </FrameLayout>
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -56,7 +123,7 @@
             android:id="@+id/timerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1:00"
+            android:text="0:00"
             android:textSize="22sp"
             android:layout_marginTop="30dp"
             app:layout_constraintTop_toBottomOf="@+id/txtLevel"

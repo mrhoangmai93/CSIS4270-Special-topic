@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 public class SessionControl {
     public static final String JWT_TOKEN = "JwtToken";
     public static final String REFRESH_TOKEN = "REFRESH_TOKEN";
+    public static final String FULL_NAME = "FULL_NAME";
     Context context;
     private  SharedPreferences prefs;
 
@@ -44,5 +45,16 @@ public class SessionControl {
         }
         return token;
     }
+    public void setFullName(String fullName) {
 
+            prefs.edit().putString(FULL_NAME, fullName).apply();
+
+    }
+    public  String getFullName() {
+        String fullName = prefs.getString(FULL_NAME, "");
+        if (fullName == null || fullName.isEmpty()) {
+            fullName = "";
+        }
+        return fullName;
+    }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="450dp"
+    android:layout_height="250dp"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_round_btn_white"
+    android:padding="16dp"
+ >
+    <TextView
+        android:id="@+id/txtRoomNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Room #"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent"
+        />
+    <TextView
+        android:id="@+id/lbHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Waiting for another player to join the game ..."
+        android:textSize="20sp"
+        android:layout_below="@+id/txtRoomNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        />
+    <ProgressBar
+        android:layout_below="@+id/lbHeader"
+        android:id="@+id/pgBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/pgBar"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_round_red"
+        android:text="Exit"/>
+
+</RelativeLayout>

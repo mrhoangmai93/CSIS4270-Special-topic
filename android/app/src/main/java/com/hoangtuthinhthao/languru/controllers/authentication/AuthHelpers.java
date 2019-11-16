@@ -95,10 +95,12 @@ public class AuthHelpers {
                         token = sessions.get(sessions.size()-1).getAccessToken();
                         refreshToken = sessions.get(sessions.size()-1).getRefreshToken();
                     }
+                    String fullName = response.body().getFirstName() + " " + response.body().getLastName();
                     Intent intent = new Intent();
                     intent.setAction(LOGIN_DONE);
                     intent.putExtra("token",token);
                     intent.putExtra("refreshToken",refreshToken);
+                    intent.putExtra("fullName",  fullName);
                     context.sendBroadcast(intent);
                 }
                 else   Toast.makeText(context, "Failed",Toast.LENGTH_SHORT).show();

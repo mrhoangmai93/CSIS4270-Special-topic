@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
@@ -84,5 +85,27 @@ public class PopUp {
             }
         });
         dialog.show();
+    }
+
+    public static void openWaitingPlayerPopup(final Dialog dialog, String roomNumber) {
+
+        dialog.setContentView(R.layout.popup_waiting_other_player);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        final TextView txtRoomNumber = dialog.findViewById(R.id.txtRoomNumber);
+        Button exitBtn = dialog.findViewById(R.id.btnExit);
+
+        txtRoomNumber.setText("Room #:" + roomNumber);
+
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public interface PopupInteraction {
+        public void onCloseDialog();
     }
 }

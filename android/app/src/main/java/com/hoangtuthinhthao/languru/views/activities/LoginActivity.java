@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView createNewAccount;
     private Button login;
 
-    private SessionControl session;
+    public static SessionControl session;
     Dialog dialog;
     ProgressDialog progressDialog;
     private BroadcastReceiver response;
@@ -141,8 +141,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void registerDone(Intent intent) {
         String token = intent.getStringExtra("token");
         String refresToken = intent.getStringExtra("refreshToken");
+        String fullName = intent.getStringExtra("fullName");
         session.setJwtToken(token);
         session.setRefreshToken(refresToken);
+        session.setFullName(fullName);
 
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);

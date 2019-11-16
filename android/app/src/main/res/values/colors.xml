@@ -6,4 +6,6 @@
     <color name="colorWhite">#fff</color>
     <color name="colorBackground">#E1FFF7</color>
     <color name="colorFinished">#2DCE00</color>
+    <color name="colorExit">#FF1414</color>
+
 </resources>

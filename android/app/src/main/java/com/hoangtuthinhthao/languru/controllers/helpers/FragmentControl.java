@@ -15,6 +15,6 @@ public class FragmentControl {
         ft = fm.beginTransaction();
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
         ft.replace(container, fg).
-                addToBackStack(null).commit();
+                addToBackStack(null).commitAllowingStateLoss();
     }
 }
