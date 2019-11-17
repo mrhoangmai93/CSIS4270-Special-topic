@@ -14,6 +14,7 @@ const RenderMenu = (props) => {
             mode="horizontal"
             style={{lineHeight: '64px', textAlign: 'right'}}
         >
+            <Menu.Item key="1"><Link to="/dashboard">Dashboard</Link></Menu.Item>
             <SubMenu
                 title={
                     <span className="submenu-title-wrapper">
