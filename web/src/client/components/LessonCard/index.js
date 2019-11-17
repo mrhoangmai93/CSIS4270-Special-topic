@@ -67,7 +67,15 @@ class LessonCard extends Component {
         }
       }
     }
-  
+    slideNext = (e) => {
+      e.preventDefault();
+      console.log("alo")
+      this.setState({
+        current: this.props.current + 1,
+        rotate: this.state.rotate + 36,
+        transition: `transform ${this.props.duration} ${this.props.ease}`,
+      });
+    }
     onTouchStart = (e) => {
       if (e.touches && e.touches.length > 1 || this.length <= 1) {
         return;
@@ -97,13 +105,15 @@ class LessonCard extends Component {
       });
     }
     onTouchEnd = (e) => {
-      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX || e.touches && !e.touches[0]) {
+      // console.log("Trigger")
+      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX || e.changedTouches && !e.changedTouches[0]) {
         return;
       }
       const x = e.pageX || e.changedTouches[0].pageX;
       const differ = x - this.startX;
       const { current, rotate } = this.state;
       const n = differ > 0 ? 1 : -1;
+      // console.log(n,differ)
       const newRotate = this.startRotate + n * this.angle *
         Math.round(Math.abs((rotate - this.startRotate) / this.angle));
       this.setState({
@@ -116,6 +126,7 @@ class LessonCard extends Component {
           rotate: newRotate,
           eventType: 'end',
         });
+        // this.props.currentcard = this.state.current;
       });
     }
     setLengthAndAngle = (props) => {
@@ -183,6 +194,7 @@ class LessonCard extends Component {
       });
     }
     render() {
+      // console.log(this.state);
       const { onChange, ...props } = this.props;
       const {
         children, tilt, style, z, perspective,
@@ -204,40 +216,38 @@ class LessonCard extends Component {
         'current',
       ].forEach(k => delete props[k]);
       return (
-        <div
-          {...props}
-          onTouchStart={this.onTouchStart}
-          onMouseDown={this.onTouchStart}
-          onTouchMove={this.onTouchMove}
-          onMouseMove={this.onTouchMove}
-          onTouchEnd={this.onTouchEnd}
-          onMouseUp={this.onTouchEnd}
-        >
-          <div className="carousel-wrapper">
-            <div
-              className="carousel"
-              style={{
-                ...style,
-                perspective: perspectiveDpr,
-                transform: `translateY(-${tilt}) scale(${(perspectiveDpr - zDpr) / perspectiveDpr})`,
-              }}
-            >
+        <>
+          <div
+            {...props}
+            onTouchStart={this.onTouchStart}
+            onMouseDown={this.onTouchStart}
+            onTouchMove={this.onTouchMove}
+            onMouseMove={this.onTouchMove}
+            onTouchEnd={this.onTouchEnd}
+            onMouseUp={this.onTouchEnd}
+          >
+            <div className="carousel-wrapper">
               <div
-                className="carouselContent"
+                className="carousel"
                 style={{
-                  transform: `translateY(${tilt}) rotateY(${this.state.rotate}deg)`,
-                  transition: this.state.transition,
+                  ...style,
+                  perspective: perspectiveDpr,
+                  transform: `translateY(-${tilt}) scale(${(perspectiveDpr - zDpr) / perspectiveDpr})`,
                 }}
               >
-                {childrenToRender}
+                <div
+                  className="carouselContent"
+                  style={{
+                    transform: `translateY(${tilt}) rotateY(${this.state.rotate}deg)`,
+                    transition: this.state.transition,
+                  }}
+                >
+                  {childrenToRender}
+                </div>
               </div>
             </div>
           </div>
-          {/* <Icon type="left-circle" />
-          <Icon type="right-circle" /> */}
-          {/* <Button shape="circle" icon="left"  style={{paddingTop: "-12px"}}/>
-          <Button shape="circle" icon="right" /> */}
-        </div>
+        </>
       );
     }
 }

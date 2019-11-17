@@ -5,7 +5,7 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import ReactCardFlip from 'react-card-flip';
 import {setProgress} from '../../containers/Lessons/lessons.action';
-import { Icon } from 'antd';
+import { Icon, Button } from 'antd';
 
 class CarouselCards extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class CarouselCards extends Component {
       this.state = {
       isFlipped: false,
       isSpeakerClicked: false,
+      isNextBtnClicked: false,
     };
   }
   
@@ -58,11 +59,18 @@ class CarouselCards extends Component {
         </div>
       )
     });
+    // console.log(this.props.currentCard)
     return (
       <div className="carousel-demo-wrapper">
-        <LessonCard className="carousel-demo" childMaxLength={10}>
+        <LessonCard className="carousel-demo" childMaxLength={10} currentcard={0}>
           {children}
         </LessonCard>
+        <div className="btnContainer">
+          <Button shape="circle" icon="left" className="btnBack" 
+            // onClick={this.setState({isNextBtnClicked: true})}
+          />
+          <Button shape="circle" icon="right" className="btnNext"/>
+        </div>
       </div>
     );
   }
