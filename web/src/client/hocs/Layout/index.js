@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import SiteFooter from "../../containers/Footer";
 import SiteHeader from "../../containers/Header";
-
+// import {Index} from "../../pages/Index";
 import {Layout} from 'antd';
 
 const {Header, Footer, Sider, Content} = Layout;
@@ -11,7 +11,7 @@ function withLayout(BaseComponent) {
         return (
             <Layout>
                 <Header><SiteHeader {...props} /></Header>
-                <Content style={{background: '#fff', minHeight: "calc(100vh - 133px)"}}>
+                <Content style={{background: '#fff', minHeight: "calc(100vh - 159px)"}}>
                     <div className="container mx-auto mt-2 mb-2" >
                         <BaseComponent {...props} />
                     </div>

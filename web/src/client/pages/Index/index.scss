@@ -1,0 +1,25 @@
+.bgHome{
+    // position: fixed; 
+    // top: 64px; 
+    // left: -50%; 
+    // width: 200%; 
+    // height: 200%;
+    img{
+        position: absolute; 
+        top: 64px; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        // margin: auto; 
+        // min-width: 50%;
+        // min-height: 50%;
+        width: 100% !important;
+        height: 40%;
+    }
+}
+
+.contentHome{
+    position: absolute;
+    height: calc(100% - 463px - 40%);
+    left: 110px;
+}
