@@ -1,56 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.activities.TranslationActivity">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Translation"
-        android:textColor="@color/colorAccent"
-        android:textSize="25sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="10"
-        android:gravity="center"
-        />
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="30"
-        android:padding="20dp"
-        >
-
-        <EditText
-            android:id="@+id/translateInput"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Input Text to Translate"
-            android:background="@drawable/bg_round_btn_white"
-            />
-    </android.support.constraint.ConstraintLayout>
-    <Button
-        android:id="@+id/btnTranslate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Translate"
-
-        />
-     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="40"
-        android:padding="20dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
         <TextView
-            android:id="@+id/translateResult"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_round_btn_white"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="Translation"
+            android:textColor="@color/colorAccent"
+            android:textSize="25sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="10"
             android:gravity="center"
             />
-    </android.support.constraint.ConstraintLayout>
-</LinearLayout>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="30"
+            android:padding="20dp"
+            >
+
+            <EditText
+                android:id="@+id/translateInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Input Text to Translate"
+                android:background="@drawable/bg_round_btn_white"
+                />
+        </android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/btnTranslate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Translate"
+
+            />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:padding="20dp"
+            >
+            <TextView
+                android:id="@+id/translateResult"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_round_btn_white"
+                android:gravity="center"
+                />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/menu_main_drawer" />
+</android.support.v4.widget.DrawerLayout>

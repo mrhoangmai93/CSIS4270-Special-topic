@@ -26,12 +26,9 @@ import com.hoangtuthinhthao.languru.controllers.alarm.AlarmReceiver;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
-import com.hoangtuthinhthao.languru.controllers.loadServices.game.LoadGame;
 import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopic;
 import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopicCallback;
 import com.hoangtuthinhthao.languru.controllers.loadServices.user.LoadUser;
-import com.hoangtuthinhthao.languru.models.game.LoadGameCallback;
-import com.hoangtuthinhthao.languru.models.responses.Lesson;
 import com.hoangtuthinhthao.languru.models.responses.Progress;
 import com.hoangtuthinhthao.languru.models.responses.Topic;
 import com.hoangtuthinhthao.languru.views.fragments.LessonFragment;
@@ -39,7 +36,6 @@ import com.hoangtuthinhthao.languru.views.fragments.OnFragmentInteractionListene
 import com.hoangtuthinhthao.languru.views.fragments.TopicFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -68,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LoadTopicCallback callback;
 
     //Session
-    private SessionControl sessionControl;
+    public static SessionControl sessionControl;
 
     //textspeaker variable
     private TextToSpeech mTTS;
@@ -123,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
         //Session
-        sessionControl = new SessionControl(this);
+        sessionControl = new SessionControl(getApplicationContext());
 
         // initialze callback for load lesson
         callback = new LoadTopicCallback() {
