@@ -23,7 +23,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="30dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorHeader"
         android:textSize="24sp"
         android:text="Welcome to our Game Center" />
     <Button

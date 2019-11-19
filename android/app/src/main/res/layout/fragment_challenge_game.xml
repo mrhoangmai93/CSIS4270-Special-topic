@@ -24,7 +24,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="30dp"
         android:textSize="24sp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorHeader"
         />
     <LinearLayout
         android:id="@+id/createGameArea"

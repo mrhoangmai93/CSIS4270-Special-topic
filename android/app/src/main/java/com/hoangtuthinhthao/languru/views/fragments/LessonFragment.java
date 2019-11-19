@@ -104,7 +104,7 @@ public class LessonFragment extends Fragment {
         word = view.findViewById(R.id.lessonName);
         wordDescription = view.findViewById(R.id.lessonDescription);
         circleProgress = view.findViewById(R.id.topicProgress);
-        int myColor = Color.parseColor("#2DCE00");
+        int myColor = Color.parseColor("#5ECCFF");
         circleProgress.setFinishedColor(myColor);
         speaker = view.findViewById(R.id.speakerImage) ;
 

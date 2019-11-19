@@ -31,7 +31,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:text="Topic Name"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorHeader"
             android:textSize="24sp"
             />
         <com.github.lzyzsd.circleprogress.CircleProgress
