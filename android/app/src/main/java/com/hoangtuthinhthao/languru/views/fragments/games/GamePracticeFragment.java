@@ -70,8 +70,6 @@ public class GamePracticeFragment extends Fragment {
     //Game item click listener
     ItemClickListener itemClickListener;
 
-    Handler timerHandler = new Handler();
-
     private long remainTime = 60000;
 
     private CreateGameBoard gb;
@@ -82,14 +80,9 @@ public class GamePracticeFragment extends Fragment {
     private  boolean isGameRunning = false;
     // io listener
     private Emitter.Listener ioListener;
-    // players state
-    private boolean oppReady = false;
-    private boolean playerReady = false;
 
     //Progress dialog
     private ProgressDialog progressDialog;
-
-
 
     private ConstraintLayout opponentLayout;
 
@@ -361,7 +354,6 @@ public class GamePracticeFragment extends Fragment {
      * game ready
      */
     private void readyGame() {
-        playerReady = true;
         mSocket.emit("player.ready");
         btnTimer.setVisibility(View.INVISIBLE);
         progressDialog.setMessage("Waiting for other player to ready!");
@@ -381,7 +373,6 @@ public class GamePracticeFragment extends Fragment {
 
                     switch (type) {
                         case "SERVER_OPPONENT_READY" :
-                            oppReady = true;
                             break;
                         case "SERVER_START_GAME":
                             progressDialog.dismiss();

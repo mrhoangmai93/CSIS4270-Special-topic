@@ -1,5 +1,7 @@
 package com.hoangtuthinhthao.languru.views.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +22,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
+import com.hoangtuthinhthao.languru.controllers.alarm.AlarmReceiver;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
+import com.hoangtuthinhthao.languru.controllers.loadServices.game.LoadGame;
 import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopic;
 import com.hoangtuthinhthao.languru.controllers.loadServices.topic.LoadTopicCallback;
 import com.hoangtuthinhthao.languru.controllers.loadServices.user.LoadUser;
+import com.hoangtuthinhthao.languru.models.game.LoadGameCallback;
 import com.hoangtuthinhthao.languru.models.responses.Lesson;
 import com.hoangtuthinhthao.languru.models.responses.Progress;
 import com.hoangtuthinhthao.languru.models.responses.Topic;
@@ -35,6 +40,7 @@ import com.hoangtuthinhthao.languru.views.fragments.TopicFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Locale;
 
 import static com.hoangtuthinhthao.languru.views.activities.LoginActivity.apiAuthInterface;
@@ -150,6 +156,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
+        //Notification
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 42);
+        calendar.set(Calendar.SECOND, 0);
+
+        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override
@@ -177,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.AI:
                 startActivity(new Intent(MainActivity.this, AIActivity.class));
+                break;
+            case R.id.translation:
+                startActivity(new Intent(MainActivity.this, TranslationActivity.class));
                 break;
         }
 

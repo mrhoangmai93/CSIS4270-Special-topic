@@ -16,8 +16,10 @@ const RenderMenu = (props) => {
                 <Menu
                     theme="dark"
                     mode="horizontal"
+                    className="navBarMenu"
                     style={{lineHeight: '64px', textAlign: 'right'}}
                 >
+                    <Menu.Item key="1"><Link to="/dashboard">Dashboard</Link></Menu.Item>
                     <SubMenu
                         title={
                             <span className="submenu-title-wrapper">
@@ -33,10 +35,10 @@ const RenderMenu = (props) => {
                                 </Menu.Item>)
                         })}
 
-                    </SubMenu>
-                    <Menu.Item key="2"><Link to="/dashboard/translation">Translation</Link></Menu.Item>
-                    <Menu.Item key="3"><Link to="/dashboard/game">Game</Link></Menu.Item>
-                    <Menu.Item key="4" onClick={logout}>Logout</Menu.Item>
+                            </SubMenu>
+                            <Menu.Item key="2"><Link to="/dashboard/translation">Translation</Link></Menu.Item>
+                            <Menu.Item key="3"><Link to="/dashboard/game">Game</Link></Menu.Item>
+                            <Menu.Item key="4" onClick={logout}>Logout</Menu.Item>
                 </Menu>;
             </div>
         )

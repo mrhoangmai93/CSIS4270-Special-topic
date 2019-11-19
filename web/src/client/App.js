@@ -6,6 +6,7 @@ import Index from './pages/Index';
 import Login from './pages/Login';
 import Lessons from './pages/Lessons';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 import Game from './pages/Game';
 import Translation from './pages/Translation';
 import FancyRoute from './components/FancyRoute';
@@ -32,6 +33,12 @@ const routes = [
     path: '/register',
     exact: true,
     component: Register,
+  },
+  {
+    title: 'Dashboard',
+    path: '/dashboard',
+    exact: true,
+    component: Dashboard,
   },
   {
     title: 'Lessons',
