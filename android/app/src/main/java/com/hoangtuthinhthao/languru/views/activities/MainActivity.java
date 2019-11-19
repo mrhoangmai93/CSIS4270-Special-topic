@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.hoangtuthinhthao.languru.R;
 import com.hoangtuthinhthao.languru.controllers.alarm.AlarmReceiver;
+import com.hoangtuthinhthao.languru.controllers.api.ApiAuthService;
+import com.hoangtuthinhthao.languru.controllers.api.ApiClient;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthChecker;
 import com.hoangtuthinhthao.languru.controllers.authentication.AuthHelpers;
 import com.hoangtuthinhthao.languru.controllers.authentication.SessionControl;
@@ -93,8 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Fragments
 
         fm = getSupportFragmentManager();
-
-
+        if (apiAuthInterface == null) {
+            apiAuthInterface = ApiClient.getClient().create(ApiAuthService.class);
+        }
         // initialize load lesson
         loadTopic = new LoadTopic(this);
 
