@@ -44,6 +44,8 @@ class LessonCard extends Component {
         current: props.current,
         transition: 'none',
         currentBackground: '#d0d2db',
+        prevCurrent: 0,
+        isCardSwiped: false,
       };
     }
     componentDidMount() {
@@ -77,12 +79,18 @@ class LessonCard extends Component {
     }
     onTouchMove = (e) => {
       if (e.touches && e.touches.length > 1 || this.length <= 1 || !this.startX || e.touches && !e.touches[0]) {
+        this.setState({isCardSwiped: false})
         return;
       }
       const x = e.pageX || e.touches[0].pageX;
       const differ = (x - this.startX) * this.props.moveRange;
       const rotate = this.startRotate + differ / this.w * this.angle;
       const r = (Math.abs(Math.ceil(this.state.rotate / 360)) * 360 - rotate) % 360;
+      if(differ !== 0){
+        this.setState({
+          isCardSwiped: true,
+        })
+      }
       const current = Math.round(r / this.angle) % this.length;
       this.setState({
         rotate,
@@ -97,7 +105,10 @@ class LessonCard extends Component {
       });
     }
     onTouchEnd = (e) => {
-      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX || e.touches && !e.touches[0]) {
+      if (e.changedTouches && e.changedTouches.length > 1 || this.length <= 1 || !this.startX || e.changedTouches && !e.changedTouches[0]) {
+        if(this.state.isCardSwiped === true){
+          this.setState({isCardSwiped: false})
+        }
         return;
       }
       const x = e.pageX || e.changedTouches[0].pageX;
@@ -116,6 +127,11 @@ class LessonCard extends Component {
           rotate: newRotate,
           eventType: 'end',
         });
+        this.setState({isCardSwiped: true})
+        if(this.props.isFlipped === true && this.state.isCardSwiped === true){
+          this.props.flipcard();
+        }
+        
       });
     }
     setLengthAndAngle = (props) => {
@@ -202,6 +218,8 @@ class LessonCard extends Component {
         'perspective',
         'z',
         'current',
+        'flipcard',
+        'isFlipped',
       ].forEach(k => delete props[k]);
       return (
         <div

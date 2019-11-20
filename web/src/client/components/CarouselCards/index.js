@@ -36,6 +36,12 @@ class CarouselCards extends Component {
     window.responsiveVoice.speak(word, "UK English Female", parameters)
   }
 
+  flipcard(){
+    if(this.state.isFlipped === true){
+      this.setState({isFlipped: false});
+    }
+  }
+
   render(){
     let lessons;
     if(this.props.lessons && this.props.lessons.list){
@@ -60,7 +66,7 @@ class CarouselCards extends Component {
     });
     return (
       <div className="carousel-demo-wrapper">
-        <LessonCard className="carousel-demo" childMaxLength={10}>
+        <LessonCard className="carousel-demo" childMaxLength={10} flipcard={this.flipcard.bind(this)} isFlipped={this.state.isFlipped}>
           {children}
         </LessonCard>
       </div>
