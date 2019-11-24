@@ -11,7 +11,7 @@
             android:title="Game"
             android:icon="@drawable/ic_settings"/>
         <item android:id="@+id/AI"
-            android:title="AI" />
+            android:title="Item detector" />
         <item android:id="@+id/settings"
             android:title="@string/settings"
             android:icon="@drawable/ic_settings"/>

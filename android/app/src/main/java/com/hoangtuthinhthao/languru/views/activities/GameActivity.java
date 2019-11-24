@@ -64,11 +64,14 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
     ProgressDialog progressDialog;
     // socket Io
     public static Socket mSocket;
+
     {
         try {
             mSocket = IO.socket(socketUrl);
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException e) {
+        }
     }
+
     private Emitter.Listener ioListener;
     private SessionControl session;
     //game Type
@@ -79,6 +82,7 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
 
     // Timer control
     public static TimerControl timerControl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +95,9 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
         FragmentControl.changeFragment(fm, ft, R.id.game_activity_container, GameCenterFragment.newInstance());
 
         //initilize session
-       session = new SessionControl(this);
+        session = new SessionControl(this);
 
-       dialog = new Dialog(this);
+        dialog = new Dialog(this);
         progressDialog = new ProgressDialog(this);
         //initialize socket
         mSocket.connect();
@@ -122,7 +126,7 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
         timerControl = new TimerControl(this);
 
         //initialize io
-        ioListener  = new Emitter.Listener() {
+        ioListener = new Emitter.Listener() {
 
             @Override
             public void call(final Object... args) {
@@ -137,10 +141,10 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
                             type = data.getString("type");
                             payload = data.getString("payload");
                             switch (type) {
-                                case "SERVER_CREATE_GAME_SUCCESS" :
-                                    PopUp.openWaitingPlayerPopup(dialog,payload);
+                                case "SERVER_CREATE_GAME_SUCCESS":
+                                    PopUp.openWaitingPlayerPopup(dialog, payload);
                                     break;
-                                case "SERVER_ENOUGH_PLAYERS" :
+                                case "SERVER_ENOUGH_PLAYERS":
                                     IoResponse response = gson.fromJson(data.toString(), IoResponse.class);
                                     //set game payload
                                     gamePayload = response.getPayload();
@@ -164,14 +168,14 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
         };
 
         //add socket listen on event
-        mSocket.on("action" ,ioListener);
+        mSocket.on("action", ioListener);
     }
 
 
     @Override
     public void onGameItemClick(int id) {
         switch (id) {
-            case  R.id.btnPractice:
+            case R.id.btnPractice:
                 gameType = "practice";
                 gameLoader.byNumberWord(currentNumberOfWord, callback);
 
@@ -187,7 +191,7 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
     @Override
     public void onGameComplete(int numberOfWord) {
         count = 0;
-        if(gameType.equals("challenge")) {
+        if (gameType.equals("challenge")) {
             timerControl.stopChallengeTimer();
         }
         switch (numberOfWord) {
@@ -199,17 +203,17 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
                 currentNumberOfWord = 15;
                 gameLoader.byNumberWord(15, callback);
                 break;
-                default:
-                    mSocket.emit("player.finishGame");
-                    Toast.makeText(this, "You have completed all level", Toast.LENGTH_SHORT).show();
+            default:
+                mSocket.emit("player.finishGame");
+                Toast.makeText(this, "You have completed all level", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onBackButtonPressed() {
-        Fragment fragment =  fm.findFragmentById(R.id.game_activity_container);
-        if(fragment instanceof GamePracticeFragment) {
-           // FragmentControl.changeFragment(fm, ft, R.id.game_activity_container, GameCenterFragment.newInstance());
+        Fragment fragment = fm.findFragmentById(R.id.game_activity_container);
+        if (fragment instanceof GamePracticeFragment) {
+            // FragmentControl.changeFragment(fm, ft, R.id.game_activity_container, GameCenterFragment.newInstance());
             GameActivity.this.onBackPressed();
         } else {
             finish();
@@ -230,9 +234,9 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
         try {
             payload.put("code", code);
             payload.put("name", fullName);
-            if(type.equals("join")) {
+            if (type.equals("join")) {
                 mSocket.emit("join", payload);
-            } else if(type.equals("create")) {
+            } else if (type.equals("create")) {
 
                 mSocket.emit("create", payload);
             }
@@ -248,29 +252,29 @@ public class GameActivity extends AppCompatActivity implements OnGameCenterInter
                 .load(lesson.getImage())
                 .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady( Bitmap resource,  Transition<? super Bitmap> transition) {
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                         lesson.setImageBitmap(resource);
 
                         count++;
 
-                        if( count == lessonList.size()) {
-                            if(gameType.equals("challenge")) {
+                        if (count == lessonList.size()) {
+                            if (gameType.equals("challenge")) {
                                 Log.i("dismiss", "dismiss");
-                               // progressDialog.dismiss();
+                                // progressDialog.dismiss();
 
                             }
 
-                            FragmentControl.changeFragment(fm, ft, R.id.game_activity_container, GamePracticeFragment.newInstance(gameType,currentNumberOfWord,lessonList));
+                            FragmentControl.changeFragment(fm, ft, R.id.game_activity_container, GamePracticeFragment.newInstance(gameType, currentNumberOfWord, lessonList));
                         }
                     }
 
                     @Override
-                    public void onLoadCleared( Drawable placeholder) {
+                    public void onLoadCleared(Drawable placeholder) {
 
                     }
 
                     @Override
-                    public void onLoadFailed( Drawable errorDrawable) {
+                    public void onLoadFailed(Drawable errorDrawable) {
                         super.onLoadFailed(errorDrawable);
                         Log.i("count", "Failed");
                     }
