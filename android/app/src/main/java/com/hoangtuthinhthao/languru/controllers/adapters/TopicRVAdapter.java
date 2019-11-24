@@ -69,7 +69,7 @@ public class TopicRVAdapter extends RecyclerView.Adapter<TopicRVAdapter.ViewHold
             topicName = itemView.findViewById(R.id.topicName);
             //topicImage = itemView.findViewById(R.id.topicImage);
             circleProgress = itemView.findViewById(R.id.topicProgress);
-            int myColor = Color.parseColor("#5ECCFF");
+            int myColor = Color.parseColor("#006391");
             circleProgress.setFinishedColor(myColor);
 
             itemView.setOnClickListener(this);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.hoangtuthinhthao.languru.R;
 
@@ -25,7 +26,8 @@ import com.hoangtuthinhthao.languru.R;
 public class ChalengeGameFragment extends Fragment {
 
     private OnGameCenterInteraction mListener;
-    private Button btnJoin, btnCreate, backBtn;
+    private Button btnJoin, btnCreate ;
+    private ImageView backBtn;
     private EditText joinCode, createCode;
     public ChalengeGameFragment() {
         // Required empty public constructor
