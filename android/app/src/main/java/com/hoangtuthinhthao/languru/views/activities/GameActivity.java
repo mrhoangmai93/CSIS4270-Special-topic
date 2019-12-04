@@ -47,7 +47,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements OnGameCenterInteraction, GameInteraction {
-    public static final String socketUrl = "http://10.0.2.2:5001/room";
+    //public static final String socketUrl = "http://10.0.2.2:5001/room";
+    public static final String socketUrl = "http://184.72.178.217:5001/room";
+
     //Fragment
     private FragmentManager fm;
     private FragmentTransaction ft;
